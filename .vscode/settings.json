@@ -1,0 +1,12 @@
+{
+  "cmake.configureOnOpen": false,
+  "cSpell.language": "en,en-GB,lorem,uk,en-US,ru,ru-RU",
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  },
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "rust-analyzer.check.command": "clippy",
+  "rust-analyzer.rustfmt.extraArgs": ["+nightly"],
+  "editor.formatOnSave": true
+}
