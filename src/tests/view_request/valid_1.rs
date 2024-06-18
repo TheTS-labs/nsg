@@ -12,7 +12,7 @@ use crate::view_request::ViewRequest;
 
 #[test]
 fn fields() {
-    let html = fs::read_to_string("src/tests/resources/valid/view_request_1.html")
+    let html = fs::read_to_string("src/tests/assets/view_request/valid/1.html")
         .expect("Should have been able to read the file");
 
     let view_request = ViewRequest::from(&html);
@@ -56,7 +56,7 @@ fn fields() {
 
 #[test]
 fn comments() {
-    let html = fs::read_to_string("src/tests/resources/valid/view_request_1.html")
+    let html = fs::read_to_string("src/tests/assets/view_request/valid/1.html")
         .expect("Should have been able to read the file");
 
     let view_request = ViewRequest::from(&html);

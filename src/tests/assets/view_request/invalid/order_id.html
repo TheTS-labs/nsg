@@ -1,5 +1,5 @@
 <script language="javascript">
-  var requestId="950207";
+  var requestId="950599";
   function initPage()
   {
       initToggles();
@@ -31,7 +31,7 @@
       $("#incidents").TableQuery({
           query:"rq_incidents",
           vars:{
-              request:"950207"
+              request:"950599"
           },
           onloadRow:function(row){
               rowid=row.find("td:first").html();
@@ -81,7 +81,7 @@
       $("#sbmshistory").TableQuery({
           query:"rq_sbmslog",
           vars:{
-              request:"950207"
+              request:"950599"
           },
           onload:countSBMSHistory,
           onloadRow:function(row){
@@ -276,7 +276,7 @@ function hidePopupTKD()
       $("#staircases").TableQuery({
           query:"rq_staircases",
           vars:{
-              address:"13879"
+              address:"13889"
           },
           onload:function(){
               $("#staircases").find("thead").prepend("<tr class=\"info\"><th colspan=\"7\">Подъезды</th></tr>");
@@ -289,7 +289,7 @@ function hidePopupTKD()
       $("#staircasecomments").TableQuery({
           query:"rq_staircasecomments",
           vars:{
-              address:"13879"
+              address:"13889"
           },
           onload:function(){
               $("#staircasecomments").find("thead").prepend("<tr class=\"info\"><th colspan=\"4\">Комментарии</th></tr>");
@@ -322,56 +322,51 @@ function hidePopupTKD()
   
                                  
       </script>
-<h3 align="center">Заявка №950207</h3>
+<h3 align="center">Заявка №950599</h3>
 <hr/>
 <div style="position:absolute">
 <table align="center">
-<tr><th align="left">Наряд:</th><td>13351186</td></tr>    <tr><th align="left">Тип:</th><td>
+<tr><th align="left">Наряд:</th><td>???</td></tr>    <tr><th align="left">Тип:</th><td>
                               Сервис            </td></tr>
-<tr><th align="left">Подтип:</th><td classContext="subtype" contextItem="18">Гігабіт</td></tr>
+<tr><th align="left">Подтип:</th><td classContext="subtype" contextItem="5">Жалобы на обслуживание</td></tr>
   <tr><th align="left">Заказчик:</th><td>Киевстар</td></tr>
-<tr><th align="left">Дата создания:</th><td>2024-05-13 16:16:00</td></tr>
-<tr><th align="left">Обновлено:</th><td>2024-05-16 14:17:49</td></tr>
-<tr><th align="left">Кем:</th><td classContext="user" v-iscontext:user="1478" contextItem="1478">████ █████ █████████</td></tr>
-<tr><th align="left">Статус:</th><td>Выполнено</td></tr>
+<tr><th align="left">Дата создания:</th><td>2024-05-15 10:49:41</td></tr>
+<tr><th align="left">Обновлено:</th><td>2024-05-16 16:42:20</td></tr>
+<tr><th align="left">Кем:</th><td classContext="user" v-iscontext:user="1088" contextItem="1088">████████ ██████ ███████████</td></tr>
+<tr><th align="left">Статус:</th><td>Не активировано</td></tr>
 
-<tr><th align="left">Диспетчер:</th><td classContext="user" contextItem="1088">████████ ██████ ███████████</td></tr>    <tr><th align="left">Город:</th><td>Запоріжжя</td></tr>    <tr><th align="left">Адрес:</th><td classContext="address" contextItem="13879" class="tdAddr" onmouseout="hidePopup()">Ладозька,██</td></tr>
-  <tr><th align="left">Квартира:</th><td classContext="conFlat&id=██">██</td></tr><tr><th align="left">Клиент:</th><td classContext="conClient"> █████ ██████ ████████████ </td></tr>                        <tr><th align="left">Тип документа:</th><td>паспорт</td></tr>                                                                <tr><th align="left">Технология:</th><td>FTTB</td></tr>
+<tr><th align="left">Диспетчер:</th><td classContext="user" contextItem="1475">████████ █████ █████████</td></tr>    <tr><th align="left">Город:</th><td>Запоріжжя</td></tr>    <tr><th align="left">Адрес:</th><td classContext="address" contextItem="13889" class="tdAddr" onmouseout="hidePopup()">Професора Толока,██</td></tr>
+  <tr><th align="left">Квартира:</th><td classContext="conFlat&id=███">███</td></tr><tr><th align="left">Клиент:</th><td classContext="conClient">█████████ ████████ </td></tr>                                                                                        <tr><th align="left">Технология:</th><td>FTTB</td></tr>
   <tr><th align="left">Точка агрегации:</th><td>FTTB_Запоріжжя</td></tr>
-  <tr><th align="left">Телефон:</th><td><a href="tel://+38096███████">+38096███████</a></td></tr>                        <tr><th align="left">Лицевой счет:</th><td classContext="abon" contextItem="&#x38;&#x32;&#x2588;&#x2588;&#x2588;&#x35;&#x39;">82███59</td></tr>                                    <tr><th align="left">Телефон продавца:</th><td>██████ ███████</td></tr>        <tr><th align="left">Срочная:</th><td>Нет</td></tr>
-                  <tr><th align="left">Срок выполнения:</th><td>2024-05-15 16:16:59</td></tr>        <tr><th align="left">Дата перезвона:</th><td>16.05.2024</td></tr>                <tr><th align="left">Дата подключения:</th><td>16.05.2024</td></tr>        <tr><th align="left">Время подключения:</th><td>с 11:00 до 11:29</td></tr>                                <tr><th align="left">Монтажник:</th><td classContext="user" contextItem="1478">████ █████ █████████</td></tr>                                                    <tr><th align="left">Способ включения:</th><td>ВДСС</td></tr>            
+  <tr><th align="left">Телефон:</th><td><a href="tel://+38067███████">+38067███████</a></td></tr>                        <tr><th align="left">Лицевой счет:</th><td classContext="abon" contextItem="&#x38;&#x38;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x2588;&#x38;&#x30;">88████████80</td></tr>                                    <tr><th align="left">Телефон продавца:</th><td>█████████ ███████</td></tr>        <tr><th align="left">Срочная:</th><td>Нет</td></tr>
+                  <tr><th align="left">Срок выполнения:</th><td>2024-05-16 10:49:41</td></tr>        <tr><th align="left">Дата перезвона:</th><td>16.05.2024</td></tr>                <tr><th align="left">Дата подключения:</th><td>16.05.2024</td></tr>        <tr><th align="left">Время подключения:</th><td>с 12:00 до 12:29</td></tr>                                <tr><th align="left">Монтажник:</th><td classContext="user" contextItem="1478">████ █████ █████████</td></tr>                                                    <tr><th align="left">Способ включения:</th><td>ВДСС</td></tr>            
       <tr><th align="left">Точки подключения:</th><td>
       <table class="table table-condensed2">
           <tr><th>Название</th><th>Выкуп</th><th>Аренда</th><th>Отв.хранение</th><th>Пакеты</th></tr>
-                              <tr><th align="left">Gigabit</th><td>1</td><td>0</td><td>0</td><td></td></tr>
+                              <tr><th align="left">СИМ-карта</th><td>0</td><td>0</td><td>0</td><td></td></tr>
+                              <tr><th align="left">Gigabit</th><td>0</td><td>0</td><td>0</td><td></td></tr>
                       </table>
   </td></tr>                <tr><th align="left">Оборудование:</th><td>
 <table class="table table-bordered table-striped table-condensed2">
    <tbody>
-   
-      <tr><td>Кабель UTP</td><td>40</td><td>4х2х0,51 БМ</td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>         
-      <tr><td>Коннектор RG-45</td><td>9</td><td></td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>         
-      <tr><td>Хомут-стяжка</td><td>12</td><td></td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>         
-      <tr><td>Изолента</td><td>5</td><td></td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>                </tbody>
+          </tbody>
 </table>
-</td></tr>        <tr><th align="left">ТВ-пакет:</th><td>0</td></tr>    <tr><th align="left">Начальный комментарий:</th><td>
-  <span id="startingcommentfull">Заявка на замену кабеля;Замена кабеля с 2 на 4 пары для Гигабита;Для можливості замовлення ТП Гігабіт;Repair date-2024-05-14;Указать метр повреждения: ; Для можливості замовлення ТП Гігабіт
-
-Просьба набрать заранее 
+</td></tr>            <tr><th align="left">Начальный комментарий:</th><td>
+  <span id="startingcommentfull">Індикатор "WAN" не горить;DOWN;Обрив одієї із жил;Указать метр повреждения-Длина кабеля	Pair A length: 24meter(s) Pair B length: 1meter(s) Pair A state: Open Pair B state: Open;Указать метр повреждения: Длина кабеля	Pair A length: 24meter(s) Pair B length: 1meter(s) Pair A state: Open Pair B state: Open; Обрив одієї із жил
 
 </span>
 </td></tr>                <tr><th align="left">Последний комментарий:</th><td>
-  <span id="lastcommentfull">Полностью заменил кабель   поменял порт (████ █████ █████████,2024-05-16 14:17:49)</span>
+  <span id="lastcommentfull">Статус у заказчика:Отклонена. Переведено в Не активировано (████████ ██████ ███████████,2024-05-16 16:42:20)</span>
   </td></tr>
-<tr><th align="left">Выделенное время:</th><td>48:00:59</td></tr><tr><th align="left">Таймер SBMS:</th><td>70:12:15</td></tr><tr><th align="left">Статус у заказчика:</th><td>Выполнена</td></tr>    <tr><th align="left">Статус оплаты:</th><td>Ожидает внесения</td></tr>    <tr><td colspan="2" align="center">
-<button onclick="act('editWorkRequest_new&id=950207')" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Редактировать(монт.)</button>                                   <button id="btnCheckSBMSActivation" title="Проверить статус активации роутеров в СБМС" class="btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span> Проверить активацию</button>
+<tr><th align="left">Выделенное время:</th><td>24:00:00</td></tr><tr><th align="left">Таймер SBMS:</th><td>29:52:07</td></tr><tr><th align="left">Статус у заказчика:</th><td>Удалена</td></tr>        <tr><td colspan="2" align="center">
+<button onclick="act('editWorkRequest_new&id=950599')" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Редактировать(монт.)</button>                                   <button id="btnCheckSBMSActivation" title="Проверить статус активации роутеров в СБМС" class="btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span> Проверить активацию</button>
               <button class="btn btn-primary" id="btnPrintTemplate" title="Экспорт по шаблону"><span class="glyphicon glyphicon-print"></span> Печать</button>
   </td></tr>    
 </table>
 <hr/>
 <table align="center" class="table table-condensed2">
 <tr><td width="50%">
-  <div align="center"><h4 data-toggle="collapse" data-target="#tblHistory">История <span class="label label-as-badge label-info">9</span></h4></div>
+  <div align="center"><h4 data-toggle="collapse" data-target="#tblHistory">История <span class="label label-as-badge label-info">4</span></h4></div>
 <div id="tblHistory" class="collapse">
 <table align="center" class="table table-bordered table-condensed2 table-hover">
 <tr><th>Время</th>
@@ -381,16 +376,59 @@ function hidePopupTKD()
   <th>Статус</th>
   <th>Комментарий</th>
 </tr>
-          <tr class="tdeven" onclick="toggleDisplay(5914732)">
-      <td>2024-05-16 14:17:49</td>
+          <tr class="tdeven" onclick="toggleDisplay(5915110)">
+      <td>2024-05-16 16:42:20</td>
+      <td></td>
+      <td>████████ ██████ ███████████</td>
+      <td>10.1.162.25</td>
+      <td>Не активировано</td>
+      <td>Статус у заказчика:Отклонена. Переведено в Не активировано</td>     
+
+  </tr>
+  <tr id="row5915110" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Не активировано
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1088">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████████ ██████ ███████████ в 2024-05-16 16:42:20
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                                                                                      
+                       
+                                                                                                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5915110" rowtime="2024-05-16 16:42:20"/>
+      </td>
+          
+  </tr>
+              <tr class="tdodd" onclick="toggleDisplay(5914973)">
+      <td>2024-05-16 15:38:18</td>
       <td></td>
       <td>████ █████ █████████</td>
       <td>10.1.162.25</td>
       <td>Выполнено</td>
-      <td>Полностью заменил кабель   поменял порт</td>     
+      <td>Поменял патчкорд в ТКД </td>     
 
   </tr>
-  <tr id="row5914732" style="display:none" >
+  <tr id="row5914973" style="display:none" >
       <td colspan="5">
           <table>
                                                                               <tr>
@@ -401,12 +439,12 @@ function hidePopupTKD()
                           Выполнено
                       </td>
                   </tr>
-                                                      <tr classContext="user" contextItem="1478">
+                                                      <tr classContext="user" contextItem="1088">
                       <td>
                           Обновлено:
                       </td>
                       <td>
-                          ████ █████ █████████ в 2024-05-16 14:17:49
+                          ████ █████ █████████ в 2024-05-16 15:38:18
                       </td>
               </tr>
                                                                                               
@@ -421,196 +459,6 @@ function hidePopupTKD()
                           2024-05-16&nbsp;<=&nbsp;2024-05-15
                       </td>
                   </tr>
-                                                                              <tr>
-                      <td>
-                          Оборудование:
-                      </td>
-                      <td>
-                          <table>
-                                                                      <tr><td>Кабель UTP</td><td>40</td></tr>
-                                                                      <tr><td>Коннектор RG-45</td><td>9</td></tr>
-                                                                      <tr><td>Хомут-стяжка</td><td>12</td></tr>
-                                                                      <tr><td>Изолента</td><td>5</td></tr>
-                                                              </table>
-                      </td>
-                  </tr>
-                 
-                                  <tr><td>
-
-              </td></tr>
-          </table>
-      </td>
-                  <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5914732" rowtime="2024-05-16 14:17:49"/>
-      </td>
-          
-  </tr>
-              <tr class="tdodd" onclick="toggleDisplay(5913102)">
-      <td>2024-05-15 14:09:28</td>
-      <td></td>
-      <td>████████ ██████ ███████████</td>
-      <td>10.1.162.25</td>
-      <td>Назначено</td>
-      <td></td>     
-
-  </tr>
-  <tr id="row5913102" style="display:none" >
-      <td colspan="5">
-          <table>
-                                                                              <tr>
-                      <td>
-                          Статус:
-                      </td>
-                      <td>
-                          Назначено
-                      </td>
-                  </tr>
-                                                      <tr classContext="user" contextItem="1478">
-                      <td>
-                          Обновлено:
-                      </td>
-                      <td>
-                          ████████ ██████ ███████████ в 2024-05-15 14:09:28
-                      </td>
-              </tr>
-                                                                                              
-                                                      
-                                                          <tr classContext="user" contextItem="1088">
-                      <td>
-                          Диспетчер:
-                      </td>
-                      <td>
-                        ████████ ██████ ███████████&nbsp;<=&nbsp;██████ █████ ███████████
-                      </td>
-                  </tr>
-                                                          <tr>
-                      <td>
-                          Время от:
-                      </td>
-                      <td>
-                          2024-05-16 11:00:00&nbsp;<=&nbsp;2024-05-16 14:00:00
-                      </td>
-                  </tr>
-                                                          <tr>
-                      <td>
-                          Время до:
-                      </td>
-                      <td>
-                          2024-05-16 11:29:59&nbsp;<=&nbsp;2024-05-16 14:29:00
-                      </td>
-                  </tr>
-                                                                          
-                       
-                                                                                                                                         
-                                  <tr><td>
-
-              </td></tr>
-          </table>
-      </td>
-                  <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5913102" rowtime="2024-05-15 14:09:28"/>
-      </td>
-          
-  </tr>
-              <tr class="tdeven" onclick="toggleDisplay(5913101)">
-      <td>2024-05-15 14:07:42</td>
-      <td></td>
-      <td>████████ ██████ ███████████</td>
-      <td>10.1.162.25</td>
-      <td>Договорено</td>
-      <td>16,05</td>     
-
-  </tr>
-  <tr id="row5913101" style="display:none" >
-      <td colspan="5">
-          <table>
-                                                                              <tr>
-                      <td>
-                          Статус:
-                      </td>
-                      <td>
-                          Договорено
-                      </td>
-                  </tr>
-                                                      <tr classContext="user" contextItem="1478">
-                      <td>
-                          Обновлено:
-                      </td>
-                      <td>
-                          ████████ ██████ ███████████ в 2024-05-15 14:07:42
-                      </td>
-              </tr>
-                                                                                              
-                                                      
-                                                                              <tr>
-                      <td>
-                          Время от:
-                      </td>
-                      <td>
-                          2024-05-16 14:00:00&nbsp;<=&nbsp;2024-05-15 14:00:00
-                      </td>
-                  </tr>
-                                                          <tr>
-                      <td>
-                          Время до:
-                      </td>
-                      <td>
-                          2024-05-16 14:29:00&nbsp;<=&nbsp;2024-05-15 14:29:59
-                      </td>
-                  </tr>
-                                                                          
-                       
-                                                                                                                                         
-                                  <tr><td>
-
-              </td></tr>
-          </table>
-      </td>
-                  <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5913101" rowtime="2024-05-15 14:07:42"/>
-      </td>
-          
-  </tr>
-              <tr class="tdodd" onclick="toggleDisplay(5913087)">
-      <td>2024-05-15 14:03:52</td>
-      <td></td>
-      <td>████ █████ █████████</td>
-      <td>10.1.162.25</td>
-      <td>Возврат (от монтажника)</td>
-      <td>Звонить на  38098███████. Договорился с абонентом на 16.05</td>     
-
-  </tr>
-  <tr id="row5913087" style="display:none" >
-      <td colspan="5">
-          <table>
-                                                                              <tr>
-                      <td>
-                          Статус:
-                      </td>
-                      <td>
-                          Возврат (от монтажника)
-                      </td>
-                  </tr>
-                                                      <tr classContext="user" contextItem="1478">
-                      <td>
-                          Обновлено:
-                      </td>
-                      <td>
-                          ████ █████ █████████ в 2024-05-15 14:03:52
-                      </td>
-              </tr>
-                                                                                              
-                                                      
-                                                                                                                                      
-                       
-                                                                                                                      <tr>
-                      <td>
-                          Дата перезвона:
-                      </td>
-                      <td>
-                          2024-05-15&nbsp;<=&nbsp;2024-05-14
-                      </td>
-                  </tr>
                                                          
                                   <tr><td>
 
@@ -618,20 +466,20 @@ function hidePopupTKD()
           </table>
       </td>
                   <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5913087" rowtime="2024-05-15 14:03:52"/>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5914973" rowtime="2024-05-16 15:38:18"/>
       </td>
           
   </tr>
-              <tr class="tdeven" onclick="toggleDisplay(5910511)">
-      <td>2024-05-14 08:36:32</td>
+              <tr class="tdeven" onclick="toggleDisplay(5912498)">
+      <td>2024-05-15 11:07:48</td>
       <td></td>
-      <td>██████ █████ ███████████</td>
+      <td>████████ █████ █████████</td>
       <td>10.1.162.25</td>
       <td>Назначено</td>
       <td></td>     
 
   </tr>
-  <tr id="row5910511" style="display:none" >
+  <tr id="row`" style="display:none" >
       <td colspan="5">
           <table>
                                                                               <tr>
@@ -642,191 +490,22 @@ function hidePopupTKD()
                           Назначено
                       </td>
                   </tr>
-                                                      <tr classContext="user" contextItem="1478">
+                                                      <tr classContext="user" contextItem="1088">
                       <td>
                           Обновлено:
                       </td>
                       <td>
-                          ██████ █████ ███████████ в 2024-05-14 08:36:32
+                          ████████ █████ █████████ в 2024-05-15 11:07:48
                       </td>
               </tr>
                                                                                               
                                                       
-                                                          <tr classContext="user" contextItem="1088">
+                                                          <tr classContext="user" contextItem="1475">
                       <td>
                           Диспетчер:
                       </td>
                       <td>
-                          ██████ █████ ███████████&nbsp;<=&nbsp;████████ ██████ ███████████
-                      </td>
-                  </tr>
-                                                                              <tr>
-                      <td>
-                          Время до:
-                      </td>
-                      <td>
-                          2024-05-15 14:29:59&nbsp;<=&nbsp;2024-05-15 14:29:00
-                      </td>
-                  </tr>
-                                                                          
-                       
-                                                                                                                                         
-                                  <tr><td>
-
-              </td></tr>
-          </table>
-      </td>
-                  <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910511" rowtime="2024-05-14 08:36:32"/>
-      </td>
-          
-  </tr>
-              <tr class="tdodd" onclick="toggleDisplay(5910506)">
-      <td>2024-05-14 08:35:24</td>
-      <td></td>
-      <td>██████ █████ ███████████</td>
-      <td>10.1.162.25</td>
-      <td>Договорено</td>
-      <td></td>     
-
-  </tr>
-  <tr id="row5910506" style="display:none" >
-      <td colspan="5">
-          <table>
-                                                                              <tr>
-                      <td>
-                          Статус:
-                      </td>
-                      <td>
-                          Договорено
-                      </td>
-                  </tr>
-                                                      <tr classContext="user" contextItem="1478">
-                      <td>
-                          Обновлено:
-                      </td>
-                      <td>
-                          ██████ █████ ███████████ в 2024-05-14 08:35:24
-                      </td>
-              </tr>
-                                                                                              
-                                                      
-                                                                              <tr>
-                      <td>
-                          Время от:
-                      </td>
-                      <td>
-                          2024-05-15 14:00:00&nbsp;<=&nbsp;2024-05-14 14:00:00
-                      </td>
-                  </tr>
-                                                          <tr>
-                      <td>
-                          Время до:
-                      </td>
-                      <td>
-                          2024-05-15 14:29:00&nbsp;<=&nbsp;2024-05-14 14:29:59
-                      </td>
-                  </tr>
-                                                                          
-                       
-                                                                                                                                         
-                                  <tr><td>
-
-              </td></tr>
-          </table>
-      </td>
-                  <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910506" rowtime="2024-05-14 08:35:24"/>
-      </td>
-          
-  </tr>
-              <tr class="tdeven" onclick="toggleDisplay(5910503)">
-      <td>2024-05-14 08:34:42</td>
-      <td></td>
-      <td>████ █████ █████████</td>
-      <td>10.1.162.25</td>
-      <td>Возврат (от монтажника)</td>
-      <td>15.05</td>     
-
-  </tr>
-  <tr id="row5910503" style="display:none" >
-      <td colspan="5">
-          <table>
-                                                                              <tr>
-                      <td>
-                          Статус:
-                      </td>
-                      <td>
-                          Возврат (от монтажника)
-                      </td>
-                  </tr>
-                                                      <tr classContext="user" contextItem="1478">
-                      <td>
-                          Обновлено:
-                      </td>
-                      <td>
-                          ████ █████ █████████ в 2024-05-14 08:34:42
-                      </td>
-              </tr>
-                                                                                              
-                                                      
-                                                                                                                                      
-                       
-                                                                                                                      <tr>
-                      <td>
-                          Дата перезвона:
-                      </td>
-                      <td>
-                          2024-05-14&nbsp;<=&nbsp;2024-05-13
-                      </td>
-                  </tr>
-                                                         
-                                  <tr><td>
-
-              </td></tr>
-          </table>
-      </td>
-                  <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910503" rowtime="2024-05-14 08:34:42"/>
-      </td>
-          
-  </tr>
-              <tr class="tdodd" onclick="toggleDisplay(5910039)">
-      <td>2024-05-13 17:18:52</td>
-      <td></td>
-      <td>████████ ██████ ███████████</td>
-      <td>10.1.162.25</td>
-      <td>Назначено</td>
-      <td></td>     
-
-  </tr>
-  <tr id="row5910039" style="display:none" >
-      <td colspan="5">
-          <table>
-                                                                              <tr>
-                      <td>
-                          Статус:
-                      </td>
-                      <td>
-                          Назначено
-                      </td>
-                  </tr>
-                                                      <tr classContext="user" contextItem="1478">
-                      <td>
-                          Обновлено:
-                      </td>
-                      <td>
-                          ████████ ██████ ███████████ в 2024-05-13 17:18:52
-                      </td>
-              </tr>
-                                                                                              
-                                                      
-                                                          <tr classContext="user" contextItem="1088">
-                      <td>
-                          Диспетчер:
-                      </td>
-                      <td>
-                          ████████ ██████ ███████████&nbsp;<=&nbsp;
+                          ████████ █████ █████████&nbsp;<=&nbsp;
                       </td>
                   </tr>
                                                           <tr>
@@ -834,7 +513,7 @@ function hidePopupTKD()
                           Время от:
                       </td>
                       <td>
-                          2024-05-14 14:00:00&nbsp;<=&nbsp;
+                          2024-05-16 12:00:00&nbsp;<=&nbsp;
                       </td>
                   </tr>
                                                           <tr>
@@ -842,7 +521,7 @@ function hidePopupTKD()
                           Время до:
                       </td>
                       <td>
-                          2024-05-14 14:29:59&nbsp;<=&nbsp;
+                          2024-05-16 12:29:59&nbsp;<=&nbsp;
                       </td>
                   </tr>
                                                                           
@@ -862,20 +541,20 @@ function hidePopupTKD()
           </table>
       </td>
                   <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910039" rowtime="2024-05-13 17:18:52"/>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5912498" rowtime="2024-05-15 11:07:48"/>
       </td>
           
   </tr>
-              <tr class="tdeven" onclick="toggleDisplay(5909993)">
-      <td>2024-05-13 17:05:51</td>
+              <tr class="tdodd" onclick="toggleDisplay(5912470)">
+      <td>2024-05-15 10:55:33</td>
       <td></td>
       <td>Система</td>
       <td></td>
       <td>Новая</td>
-      <td>Заявка на замену кабеля;Замена кабеля с 2 на 4 пары для Гигабита;Для можливості замовлення ТП Гігабіт;Repair date-2024-05-14;Указать метр повреждения: ; Для можливості замовлення ТП Гігабіт&lt;br/&gt;&lt;br/&gt;Просьба набрать заранее &lt;br/&gt;&lt;br/&gt;</td>     
+      <td>Індикатор &quot;WAN&quot; не горить;DOWN;Обрив одієї із жил;Указать метр повреждения-Длина кабеля	Pair A length: 24meter(s) Pair B length: 1meter(s) Pair A state: Open Pair B state: Open;Указать метр повреждения: Длина кабеля	Pair A length: 24meter(s) Pair B length: 1meter(s) Pair A state: Open Pair B state: Open; Обрив одієї із жил&lt;br/&gt;&lt;br/&gt;</td>     
 
   </tr>
-  <tr id="row5909993" style="display:none" >
+  <tr id="row5912470" style="display:none" >
       <td colspan="5">
           <table>
                                                                               <tr>
@@ -886,12 +565,12 @@ function hidePopupTKD()
                           Новая
                       </td>
                   </tr>
-                                                      <tr classContext="user" contextItem="1478">
+                                                      <tr classContext="user" contextItem="1088">
                       <td>
                           Обновлено:
                       </td>
                       <td>
-                          Система в 2024-05-13 17:05:51
+                          Система в 2024-05-15 10:55:33
                       </td>
               </tr>
                                                                                               
@@ -905,7 +584,7 @@ function hidePopupTKD()
           </table>
       </td>
                   <td>
-                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5909993" rowtime="2024-05-13 17:05:51"/>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5912470" rowtime="2024-05-15 10:55:33"/>
       </td>
           
   </tr>
@@ -930,7 +609,7 @@ function hidePopupTKD()
 </div>
 <hr/>
 <textarea style="width:100%" rows="3" id="comment_new" title="Комментарий" placeholder="Комментарий" class="form-control"></textarea>
-<div class="form-inline"><button onclick="addComment(950207)" class="btn btn-info" id="btnAddComment">Добавить комментарий</button>&nbsp;Фото:
+<div class="form-inline"><button onclick="addComment(950599)" class="btn btn-info" id="btnAddComment">Добавить комментарий</button>&nbsp;Фото:
   <input id="comment_photo" type="file" class="form-control" title="Прикрепить фотографию" placeholder="Прикрепить фото"/>
 </div>
 
@@ -940,9 +619,9 @@ function hidePopupTKD()
   <div id="divServices" class="collapse">
   <table align="center" class="table table-bordered table-striped table-condensed2">
       <thead><th>Услуга</th><th>Источник</th></thead>
-                      <tr class="servicesrow tdodd" rowid="1">
-              <td>Подключение к сети FTTB</td>
-              <td>Подтип Гігабіт</td>
+                      <tr class="servicesrow tdodd" rowid="5">
+              <td>Сервис на сети FTTB</td>
+              <td>Подтип Жалобы на обслуживание</td>
           </tr>
               </table>
   </div>
@@ -1126,7 +805,7 @@ function loadIncidentSubtypes()
        });
        $.post("headless.php",{
            action:"checkSBMSRouter",
-           request:"950207"
+           request:"950599"
        },function(jd){
            d=JSON.parse(jd);
            if (d[1]==0)
@@ -1144,7 +823,7 @@ $("#btnPrintTemplate").click(function(){
   $("#tblExportTemplates").TableQuery({
       query:"rq_exportTemplates",
       vars:{
-          subtype:"18"
+          subtype:"5"
       },
       sticky:true
   });
@@ -1162,9 +841,8 @@ function submitPrintTemplate()
   if ((t==null)||(t==""))
       return myAlert("Не выбран шаблон для экспорта.");
   $("#dlg_printTemplate").dialog("close");
-  actblank("rq_printTemplate&id=950207&template="+t,1);
+  actblank("rq_printTemplate&id=950599&template="+t,1);
 }
 
 
 </script>
-

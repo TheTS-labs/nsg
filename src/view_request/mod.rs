@@ -27,17 +27,22 @@ use crate::traits::prev_element_ref::PrevElementRef;
 pub struct ViewRequest {
     pub order_id:          Option<Result<u32, SerializableIntErrorKind>>,
     pub internal_order_id: Option<Result<u32, SerializableIntErrorKind>>,
+    // TODO: Use "Подтип" to determine active or passive order type
     pub order_type:        Option<Result<OrderType, OrderTypeError>>,
+    // TODO: Rename to creation_date
     pub creation_date:     Option<Result<DateTime<FixedOffset>, SerializableParseErrorKind>>,
     pub internal_status:   Option<Result<InternalStatus, InternalStatusError>>,
     pub address:           Option<Address>,
     pub client:            Option<String>,
     pub service:           Option<String>,
     pub pa:                Option<String>,
+    // TODO: Parse also "Канал подачи заявки", "Код продавца" and "Продавец"
+    // TODO: Example at src/tests/assets/view_request/valid/4.html
     pub seller:            Option<String>,
     pub time_constrains:   Option<Result<TimeConstrains, TimeConstrainsError>>,
     pub installers:        Vec<String>,
     pub status:            Option<Result<Status, StatusError>>,
+    // TODO: View request gives only one of possibly two phones
     pub phones:            Vec<String>,
     pub assigned_for:      Option<Result<NaiveDate, SerializableParseErrorKind>>,
     pub comments:          Vec<Result<FullComment, FullCommentError>>,

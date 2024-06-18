@@ -1,0 +1,1169 @@
+<script language="javascript">
+  var requestId="950207";
+  function initPage()
+  {
+      initToggles();
+      $.when(initTabler2()).done(()=>{
+          loadIncidents();
+              loadRequestInstances();                loadStaircases();            
+          loadStaircaseComments();
+          loadSBMSHistory();
+                                          $.post("headless.php?action=ondemandInfoRequest",{
+              action:"ondemandInfoRequest",
+              id:requestId,
+              cron:1
+          },function(data){
+              if (data=="1")
+              {
+                  myConfirm("Данные заказчика обновлены. Обновить страницу?",()=>{
+                      location.reload();
+                  });
+              }
+          });
+          
+                      
+          loadInvOps();                $(".tdAddr").on("mouseover",showPopup);
+      });
+  }
+  
+  function loadIncidents()
+  {
+      $("#incidents").TableQuery({
+          query:"rq_incidents",
+          vars:{
+              request:"950207"
+          },
+          onloadRow:function(row){
+              rowid=row.find("td:first").html();
+              row.find("td:first").html("<a href=\"?action=editIncident&id="+rowid+"\">"+rowid+"</a>");
+          },
+          onload:countIncidents
+      });
+  }
+  
+  function countIncidents()
+  {
+      c=$("#incidents").find("tr.tablerrow").length;
+      $("#incidents_counter").html(c);
+      if (c>0)
+          $("#incidents_counter").addClass("label-danger").removeClass("label-default");
+  }
+      
+  
+  function loadRequestInstances()
+  {
+      $("#request_instances").JSONTableQuery({
+          query:"request_getRequestInstances",
+          vars:{
+              id:requestId
+          },
+          onload:countInstances
+      });
+  }
+  
+  function countInstances()
+  {
+      c=$("#request_instances").find("tr.tablerrow").length;
+      $("#request_instances").find("tr.tablerrow").each(function(){
+          d=$(this).data("rowdata");
+          $(this).attr("contextItem",d.instance);
+      });
+      $("#instances_counter").html(c);
+      if (c>0)
+      {
+          $("#instances_counter").addClass("label-info").removeClass("label-default");
+          $("#divFixRequestInstances").removeClass("hidden");
+      }
+  }        
+          
+  function loadSBMSHistory()
+  {
+      $("#sbmshistory").TableQuery({
+          query:"rq_sbmslog",
+          vars:{
+              request:"950207"
+          },
+          onload:countSBMSHistory,
+          onloadRow:function(row){
+              attcell=row.find("td.attention");
+              att=attcell.html();
+              if (att!="0")
+              {
+                  if (row.find("td.updaterfio").html()!="")
+                      attcell.html("Подтверждено: "+row.find("td.updaterfio").html());
+                  else
+                  {
+                      attcell.html("<button class=\"btn btn-sm\" onclick=\"confirmRequest("+row.attr("rowid")+")\"></button>");
+                      attcell.find("button").html("<span class=\"glyphicon glyphicon-ok-circle\"></span>").attr("title","Подтвердить");
+                      attcell.find("button").addClass((att=="1")?"btn-danger":"btn-warning");
+                  }
+              }
+              else
+                  attcell.html("");
+                              }
+      });
+  }
+  
+  function countSBMSHistory()
+  {
+      c=$("#sbmshistory").find("tr.tablerrow").length;
+      $("#sbmshistory_counter").html(c);
+      if (c>0) $("#sbmshistory_counter").removeClass("label-default").addClass("label-success");
+  }
+  
+  function deleteRequest(id)
+  {
+      myConfirm("Удалить эту заявку?",()=>{
+          act("deleteRequest&id="+id);
+      });
+  }
+      
+  function toggleDisplay(id)
+  {
+      el=document.getElementById("row"+id);
+      if (el.style.display=="none")
+          el.style.display="table-row";
+      else
+          el.style.display="none";
+  }
+      
+  function rollback(id)
+  {
+      $(".btnRollback").attr("disabled",true);
+      myConfirm("Уверены, что хотите откатить заявку?",()=>
+      {
+          $.post("headless.php?action=rollbackRequest",{
+              action:"rollbackRequest",
+              id:id
+          },function(dataarr){
+              data=JSON.parse(dataarr);
+              if (data.error!=null)
+                  myAlert(data.error);
+              else
+                  reloadAll();
+              $(".btnRollback").attr("disabled",false);
+          });
+      },()=>{
+          $(".btnRollback").attr("disabled",false);
+      });
+  }
+      
+  function reloadAll()
+  {
+      document.location.reload(true);
+  }
+      
+function showIncidentDialog()
+{
+  loadIncidentSubtypes();
+  $("#incidentDialog").JDialog({
+      title:"Создание инцидента",
+      buttons:{
+          "Создать":submitIncident
+      }
+  });
+}
+  
+function closeIncidentDialog()
+{
+  $("#incidentDialog").dialog("close");
+}         
+
+function confirmRequest(id)
+{
+  $.post("headless.php?action=confirmSBMSChange",{
+      action:"confirmSBMSChange",
+      id:id
+  },loadSBMSHistory);
+}
+              
+function submitIncident()
+{
+  if (($("#incidentsubtype").val()=="")&&($("#incidentsubtype").find("option").length>0))
+  {
+      myAlert("Не выбран подтип.");
+      return;
+  }
+  closeIncidentDialog();
+  $.post("headless.php",{
+      action:"createIncident",
+      id:requestId,
+      text:$("#incidentcomment").val(),
+      link:$("#incidentlink").val(),
+      subtype:$("#incidentsubtype").val(),
+  },loadIncidents);
+}
+  
+function editIncident(id)
+{
+  act("editIncident&id="+id);
+}
+  
+function addComment(id)
+{
+  comment=$("#comment_new").val();
+  if (comment=="")
+  {
+      myAlert("Введите текст комментария");
+      return;
+  }
+  var fileIn = $("#comment_photo")[0];
+  formdata=new FormData();
+  formdata.append("action","addRequestComment");
+  formdata.append("id",id);
+  formdata.append("comment",comment);
+  if (fileIn.files[0]!=null)
+  {
+      formdata.append("commentfile",fileIn.files[0]);
+  }
+  $("#btnAddComment").prop("disabled",true);
+  $("#btnAddComment").html("Ожидайте...");
+  $.ajax({
+      url: "headless.php?action=addRequestComment",
+      type: "POST",
+      data: formdata,
+      processData: false, //Work around #1
+      contentType: false,
+      success:function(data){
+          location.reload();
+      }
+  });
+}
+  
+function findTradeReport(id)
+{
+  acthidden("findRequestTradeReport&id="+id,reloadpage);
+}
+  
+function reloadpage()
+{
+  window.location.reload();
+}
+
+function showPopup(event)
+{
+  $("#popupbox").css({
+      top:event.pageY-50,
+      left:event.pageX+20,
+      display:"block",
+      position:"absolute"
+  });
+}
+  
+function hidePopup()
+{
+  imagebox=gid("popupbox");
+  imagebox.style.display='none';
+}    
+
+function showPopupTKD(event)
+{
+  console.log(this);
+  imagebox=gid("popupbox_tkd");
+  imagebox.style.left=event.pageX+20;
+  imagebox.style.top=event.pageY-5;
+  imagebox.style.display='block';
+}
+  
+function hidePopupTKD()
+{
+  imagebox=gid("popupbox_tkd");
+  imagebox.style.display='none';
+}    
+
+  function loadStaircases()
+  {
+      $("#staircases").TableQuery({
+          query:"rq_staircases",
+          vars:{
+              address:"13879"
+          },
+          onload:function(){
+              $("#staircases").find("thead").prepend("<tr class=\"info\"><th colspan=\"7\">Подъезды</th></tr>");
+          }
+      });
+  }    
+  
+  function loadStaircaseComments()
+  {
+      $("#staircasecomments").TableQuery({
+          query:"rq_staircasecomments",
+          vars:{
+              address:"13879"
+          },
+          onload:function(){
+              $("#staircasecomments").find("thead").prepend("<tr class=\"info\"><th colspan=\"4\">Комментарии</th></tr>");
+          }
+      })
+  }            
+  
+  
+
+  
+  function loadInvOps()
+  {
+      $("#invops").JSONTableQuery({
+          query:"request_invops",
+          debugload:1,
+          vars:{
+              id:requestId
+          },
+          onload:countInvOps
+      });
+  }
+  
+  function countInvOps()
+  {
+      c=$("#invops").find("tr.tablerrow").length;
+      $("#invops_counter").html(c);
+      if (c>0)
+          $("#invops_counter").addClass("label-success").removeClass("label-default");
+  }
+  
+                                 
+      </script>
+<h3 align="center">Заявка №950207</h3>
+<hr/>
+<div style="position:absolute">
+<table align="center">
+<tr><th align="left">Наряд:</th><td>13351186</td></tr>    <tr><th align="left">Тип:</th><td>
+                              Сервис            </td></tr>
+<tr><th align="left">Подтип:</th><td classContext="subtype" contextItem="18">Гігабіт</td></tr>
+  <tr><th align="left">Заказчик:</th><td>Киевстар</td></tr>
+<tr><th align="left">Дата создания:</th><td>2024-05-13 16:16:00</td></tr>
+<tr><th align="left">Обновлено:</th><td>2024-05-16 14:17:49</td></tr>
+<tr><th align="left">Кем:</th><td classContext="user" v-iscontext:user="1478" contextItem="1478">████ █████ █████████</td></tr>
+<tr><th align="left">Статус:</th><td>Выполнено</td></tr>
+
+<tr><th align="left">Диспетчер:</th><td classContext="user" contextItem="1088">████████ ██████ ███████████</td></tr>    <tr><th align="left">Город:</th><td>Запоріжжя</td></tr>    <tr><th align="left">Адрес:</th><td classContext="address" contextItem="13879" class="tdAddr" onmouseout="hidePopup()">Ладозька,██</td></tr>
+  <tr><th align="left">Квартира:</th><td classContext="conFlat&id=██">██</td></tr><tr><th align="left">Клиент:</th><td classContext="conClient"> █████ ██████ ████████████ </td></tr>                        <tr><th align="left">Тип документа:</th><td>паспорт</td></tr>                                                                <tr><th align="left">Технология:</th><td>FTTB</td></tr>
+  <tr><th align="left">Точка агрегации:</th><td>FTTB_Запоріжжя</td></tr>
+  <tr><th align="left">Телефон:</th><td><a href="tel://+38096███████">+38096███████</a></td></tr>                        <tr><th align="left">Лицевой счет:</th><td classContext="abon" contextItem="&#x38;&#x32;&#x2588;&#x2588;&#x2588;&#x35;&#x39;">82███59</td></tr>                                    <tr><th align="left">Телефон продавца:</th><td>██████ ███████</td></tr>        <tr><th align="left">Срочная:</th><td>Нет</td></tr>
+                  <tr><th align="left">Срок выполнения:</th><td>2024-05-15 16:16:59</td></tr>        <tr><th align="left">Дата перезвона:</th><td>16.05.2024</td></tr>                <tr><th align="left">Дата подключения:</th><td>16.05.2024</td></tr>        <tr><th align="left">Время подключения:</th><td>с 11:00 до 11:29</td></tr>                                <tr><th align="left">Монтажник:</th><td classContext="user" contextItem="1478">████ █████ █████████</td></tr>                                                    <tr><th align="left">Способ включения:</th><td>ВДСС</td></tr>            
+      <tr><th align="left">Точки подключения:</th><td>
+      <table class="table table-condensed2">
+          <tr><th>Название</th><th>Выкуп</th><th>Аренда</th><th>Отв.хранение</th><th>Пакеты</th></tr>
+                              <tr><th align="left">Gigabit</th><td>1</td><td>0</td><td>0</td><td></td></tr>
+                      </table>
+  </td></tr>                <tr><th align="left">Оборудование:</th><td>
+<table class="table table-bordered table-striped table-condensed2">
+   <tbody>
+   
+      <tr><td>Кабель UTP</td><td>40</td><td>4х2х0,51 БМ</td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>         
+      <tr><td>Коннектор RG-45</td><td>9</td><td></td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>         
+      <tr><td>Хомут-стяжка</td><td>12</td><td></td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>         
+      <tr><td>Изолента</td><td>5</td><td></td><td>Выдать(абонент)</td><td >-Абонент-</td></tr>                </tbody>
+</table>
+</td></tr>        <tr><th align="left">ТВ-пакет:</th><td>0</td></tr>    <tr><th align="left">Начальный комментарий:</th><td>
+  <span id="startingcommentfull">Заявка на замену кабеля;Замена кабеля с 2 на 4 пары для Гигабита;Для можливості замовлення ТП Гігабіт;Repair date-2024-05-14;Указать метр повреждения: ; Для можливості замовлення ТП Гігабіт
+
+Просьба набрать заранее 
+
+</span>
+</td></tr>                <tr><th align="left">Последний комментарий:</th><td>
+  <span id="lastcommentfull">Полностью заменил кабель   поменял порт (████ █████ █████████,2024-05-16 14:17:49)</span>
+  </td></tr>
+<tr><th align="left">Выделенное время:</th><td>48:00:59</td></tr><tr><th align="left">Таймер SBMS:</th><td>70:12:15</td></tr><tr><th align="left">Статус у заказчика:</th><td>Выполнена</td></tr>    <tr><th align="left">Статус оплаты:</th><td>Ожидает внесения</td></tr>    <tr><td colspan="2" align="center">
+<button onclick="act('editWorkRequest_new&id=950207')" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> Редактировать(монт.)</button>                                   <button id="btnCheckSBMSActivation" title="Проверить статус активации роутеров в СБМС" class="btn btn-primary"><span class="glyphicon glyphicon-info-sign"></span> Проверить активацию</button>
+              <button class="btn btn-primary" id="btnPrintTemplate" title="Экспорт по шаблону"><span class="glyphicon glyphicon-print"></span> Печать</button>
+  </td></tr>    
+</table>
+<hr/>
+<table align="center" class="table table-condensed2">
+<tr><td width="50%">
+  <div align="center"><h4 data-toggle="collapse" data-target="#tblHistory">История <span class="label label-as-badge label-info">9</span></h4></div>
+<div id="tblHistory" class="collapse">
+<table align="center" class="table table-bordered table-condensed2 table-hover">
+<tr><th>Время</th>
+  <th>Локальное время</th>
+  <th>Пользователь</th>
+  <th>IP</th>
+  <th>Статус</th>
+  <th>Комментарий</th>
+</tr>
+          <tr class="tdeven" onclick="toggleDisplay(5914732)">
+      <td>2024-05-16 14:17:49</td>
+      <td></td>
+      <td>████ █████ █████████</td>
+      <td>10.1.162.25</td>
+      <td>Выполнено</td>
+      <td>Полностью заменил кабель   поменял порт</td>     
+
+  </tr>
+  <tr id="row5914732" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Выполнено
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████ █████ █████████ в 2024-05-16 14:17:49
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                                                                                      
+                       
+                                                                                                                      <tr>
+                      <td>
+                          Дата перезвона:
+                      </td>
+                      <td>
+                          2024-05-16&nbsp;<=&nbsp;2024-05-15
+                      </td>
+                  </tr>
+                                                                              <tr>
+                      <td>
+                          Оборудование:
+                      </td>
+                      <td>
+                          <table>
+                                                                      <tr><td>Кабель UTP</td><td>40</td></tr>
+                                                                      <tr><td>Коннектор RG-45</td><td>9</td></tr>
+                                                                      <tr><td>Хомут-стяжка</td><td>12</td></tr>
+                                                                      <tr><td>Изолента</td><td>5</td></tr>
+                                                              </table>
+                      </td>
+                  </tr>
+                 
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5914732" rowtime="2024-05-16 14:17:49"/>
+      </td>
+          
+  </tr>
+              <tr class="tdodd" onclick="toggleDisplay(5913102)">
+      <td>2024-05-15 14:09:28</td>
+      <td></td>
+      <td>████████ ██████ ███████████</td>
+      <td>10.1.162.25</td>
+      <td>Назначено</td>
+      <td></td>     
+
+  </tr>
+  <tr id="row5913102" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Назначено
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████████ ██████ ███████████ в 2024-05-15 14:09:28
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                          <tr classContext="user" contextItem="1088">
+                      <td>
+                          Диспетчер:
+                      </td>
+                      <td>
+                        ████████ ██████ ███████████&nbsp;<=&nbsp;██████ █████ ███████████
+                      </td>
+                  </tr>
+                                                          <tr>
+                      <td>
+                          Время от:
+                      </td>
+                      <td>
+                          2024-05-16 11:00:00&nbsp;<=&nbsp;2024-05-16 14:00:00
+                      </td>
+                  </tr>
+                                                          <tr>
+                      <td>
+                          Время до:
+                      </td>
+                      <td>
+                          2024-05-16 11:29:59&nbsp;<=&nbsp;2024-05-16 14:29:00
+                      </td>
+                  </tr>
+                                                                          
+                       
+                                                                                                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5913102" rowtime="2024-05-15 14:09:28"/>
+      </td>
+          
+  </tr>
+              <tr class="tdeven" onclick="toggleDisplay(5913101)">
+      <td>2024-05-15 14:07:42</td>
+      <td></td>
+      <td>████████ ██████ ███████████</td>
+      <td>10.1.162.25</td>
+      <td>Договорено</td>
+      <td>16,05</td>     
+
+  </tr>
+  <tr id="row5913101" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Договорено
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████████ ██████ ███████████ в 2024-05-15 14:07:42
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                              <tr>
+                      <td>
+                          Время от:
+                      </td>
+                      <td>
+                          2024-05-16 14:00:00&nbsp;<=&nbsp;2024-05-15 14:00:00
+                      </td>
+                  </tr>
+                                                          <tr>
+                      <td>
+                          Время до:
+                      </td>
+                      <td>
+                          2024-05-16 14:29:00&nbsp;<=&nbsp;2024-05-15 14:29:59
+                      </td>
+                  </tr>
+                                                                          
+                       
+                                                                                                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5913101" rowtime="2024-05-15 14:07:42"/>
+      </td>
+          
+  </tr>
+              <tr class="tdodd" onclick="toggleDisplay(5913087)">
+      <td>2024-05-15 14:03:52</td>
+      <td></td>
+      <td>████ █████ █████████</td>
+      <td>10.1.162.25</td>
+      <td>Возврат (от монтажника)</td>
+      <td>Звонить на  38098███████. Договорился с абонентом на 16.05</td>     
+
+  </tr>
+  <tr id="row5913087" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Возврат (от монтажника)
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████ █████ █████████ в 2024-05-15 14:03:52
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                                                                                      
+                       
+                                                                                                                      <tr>
+                      <td>
+                          Дата перезвона:
+                      </td>
+                      <td>
+                          2024-05-15&nbsp;<=&nbsp;2024-05-14
+                      </td>
+                  </tr>
+                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5913087" rowtime="2024-05-15 14:03:52"/>
+      </td>
+          
+  </tr>
+              <tr class="tdeven" onclick="toggleDisplay(5910511)">
+      <td>2024-05-14 08:36:32</td>
+      <td></td>
+      <td>██████ █████ ███████████</td>
+      <td>10.1.162.25</td>
+      <td>Назначено</td>
+      <td></td>     
+
+  </tr>
+  <tr id="row5910511" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Назначено
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ██████ █████ ███████████ в 2024-05-14 08:36:32
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                          <tr classContext="user" contextItem="1088">
+                      <td>
+                          Диспетчер:
+                      </td>
+                      <td>
+                          ██████ █████ ███████████&nbsp;<=&nbsp;████████ ██████ ███████████
+                      </td>
+                  </tr>
+                                                                              <tr>
+                      <td>
+                          Время до:
+                      </td>
+                      <td>
+                          2024-05-15 14:29:59&nbsp;<=&nbsp;2024-05-15 14:29:00
+                      </td>
+                  </tr>
+                                                                          
+                       
+                                                                                                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910511" rowtime="2024-05-14 08:36:32"/>
+      </td>
+          
+  </tr>
+              <tr class="tdodd" onclick="toggleDisplay(5910506)">
+      <td>2024-05-14 08:35:24</td>
+      <td></td>
+      <td>██████ █████ ███████████</td>
+      <td>10.1.162.25</td>
+      <td>Договорено</td>
+      <td></td>     
+
+  </tr>
+  <tr id="row5910506" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Договорено
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ██████ █████ ███████████ в 2024-05-14 08:35:24
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                              <tr>
+                      <td>
+                          Время от:
+                      </td>
+                      <td>
+                          2024-05-15 14:00:00&nbsp;<=&nbsp;2024-05-14 14:00:00
+                      </td>
+                  </tr>
+                                                          <tr>
+                      <td>
+                          Время до:
+                      </td>
+                      <td>
+                          2024-05-15 14:29:00&nbsp;<=&nbsp;2024-05-14 14:29:59
+                      </td>
+                  </tr>
+                                                                          
+                       
+                                                                                                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910506" rowtime="2024-05-14 08:35:24"/>
+      </td>
+          
+  </tr>
+              <tr class="tdeven" onclick="toggleDisplay(5910503)">
+      <td>2024-05-14 08:34:42</td>
+      <td></td>
+      <td>████ █████ █████████</td>
+      <td>10.1.162.25</td>
+      <td>Возврат (от монтажника)</td>
+      <td>15.05</td>     
+
+  </tr>
+  <tr id="row5910503" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Возврат (от монтажника)
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████ █████ █████████ в 2024-05-14 08:34:42
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                                                                                      
+                       
+                                                                                                                      <tr>
+                      <td>
+                          Дата перезвона:
+                      </td>
+                      <td>
+                          2024-05-14&nbsp;<=&nbsp;2024-05-13
+                      </td>
+                  </tr>
+                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910503" rowtime="2024-05-14 08:34:42"/>
+      </td>
+          
+  </tr>
+              <tr class="tdodd" onclick="toggleDisplay(5910039)">
+      <td>2024-05-13 17:18:52</td>
+      <td></td>
+      <td>████████ ██████ ███████████</td>
+      <td>10.1.162.25</td>
+      <td>Назначено</td>
+      <td></td>     
+
+  </tr>
+  <tr id="row5910039" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Назначено
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          ████████ ██████ ███████████ в 2024-05-13 17:18:52
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                          <tr classContext="user" contextItem="1088">
+                      <td>
+                          Диспетчер:
+                      </td>
+                      <td>
+                          ████████ ██████ ███████████&nbsp;<=&nbsp;
+                      </td>
+                  </tr>
+                                                          <tr>
+                      <td>
+                          Время от:
+                      </td>
+                      <td>
+                          2024-05-14 14:00:00&nbsp;<=&nbsp;
+                      </td>
+                  </tr>
+                                                          <tr>
+                      <td>
+                          Время до:
+                      </td>
+                      <td>
+                          2024-05-14 14:29:59&nbsp;<=&nbsp;
+                      </td>
+                  </tr>
+                                                                          
+                       
+                                                          <tr classContext="user" contextItem="1478">
+                      <td>
+                          Монтажник:
+                      </td>
+                      <td>
+                          ████ █████ █████████&nbsp;<=&nbsp;
+                      </td>
+                  </tr>
+                                                                                                                     
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5910039" rowtime="2024-05-13 17:18:52"/>
+      </td>
+          
+  </tr>
+              <tr class="tdeven" onclick="toggleDisplay(5909993)">
+      <td>2024-05-13 17:05:51</td>
+      <td></td>
+      <td>Система</td>
+      <td></td>
+      <td>Новая</td>
+      <td>Заявка на замену кабеля;Замена кабеля с 2 на 4 пары для Гигабита;Для можливості замовлення ТП Гігабіт;Repair date-2024-05-14;Указать метр повреждения: ; Для можливості замовлення ТП Гігабіт&lt;br/&gt;&lt;br/&gt;Просьба набрать заранее &lt;br/&gt;&lt;br/&gt;</td>     
+
+  </tr>
+  <tr id="row5909993" style="display:none" >
+      <td colspan="5">
+          <table>
+                                                                              <tr>
+                      <td>
+                          Статус:
+                      </td>
+                      <td>
+                          Новая
+                      </td>
+                  </tr>
+                                                      <tr classContext="user" contextItem="1478">
+                      <td>
+                          Обновлено:
+                      </td>
+                      <td>
+                          Система в 2024-05-13 17:05:51
+                      </td>
+              </tr>
+                                                                                              
+                                                      
+                                                                                                                                      
+                       
+                                                                                                                                         
+                                  <tr><td>
+
+              </td></tr>
+          </table>
+      </td>
+                  <td>
+                          <img class="floatright btnViewHistory" src="icons/icon_visible.png" title="Просмотреть полную историю" rowid="5909993" rowtime="2024-05-13 17:05:51"/>
+      </td>
+          
+  </tr>
+             
+</table>
+</div>
+<hr/>
+  <div align="center"><h4 data-toggle="collapse" data-target="#divAttachedFiles">Прикрепленные файлы <span class="label label-as-badge label-default" id="files_counter">0</span></h4></div>
+<div id="divAttachedFiles" class="collapse"> 
+  <table class="table table-bordered table-striped table-condensed2">
+      <thead><tr><th>Время</th><th>Автор</th><th>Комментарий</th><th>Файл</th></tr></thead>
+      <tbody>
+                      </tbody>
+  </table>
+  
+</div>
+<hr/>
+<div align="center"><h4 data-toggle="collapse" data-target="#divSBMSHistory">История импорта <span class="label label-as-badge label-default" id="sbmshistory_counter"></span></h4></div>
+<div id="divSBMSHistory" class="collapse">
+<table align="center"  class="table table-bordered table-striped table-condensed2" id="sbmshistory">
+</table>
+</div>
+<hr/>
+<textarea style="width:100%" rows="3" id="comment_new" title="Комментарий" placeholder="Комментарий" class="form-control"></textarea>
+<div class="form-inline"><button onclick="addComment(950207)" class="btn btn-info" id="btnAddComment">Добавить комментарий</button>&nbsp;Фото:
+  <input id="comment_photo" type="file" class="form-control" title="Прикрепить фотографию" placeholder="Прикрепить фото"/>
+</div>
+
+</td>
+<td width="50%" valign="top">
+          <div align="center"><h4 data-toggle="collapse" data-target="#divServices">Услуги <span class="label label-as-badge label-info">1</span></h4></div>
+  <div id="divServices" class="collapse">
+  <table align="center" class="table table-bordered table-striped table-condensed2">
+      <thead><th>Услуга</th><th>Источник</th></thead>
+                      <tr class="servicesrow tdodd" rowid="1">
+              <td>Подключение к сети FTTB</td>
+              <td>Подтип Гігабіт</td>
+          </tr>
+              </table>
+  </div>
+  <hr/>
+  <div align="center"><h4 data-toggle="collapse" data-target="#divIncidents">Инциденты <span class="label label-default label-as-badge" id="incidents_counter"></span></h4></div>
+<div id="divIncidents" class="collapse">
+<table align="center" class="table table-bordered table-striped table-condensed2" id="incidents" classContext="incident" >
+</table>
+</div>
+      <hr/>
+                  
+<div align="center"><h4 data-toggle="collapse" data-target="#divInvOps">Инвентарные операции <span class="label label-default label-as-badge" id="invops_counter"></span></h4></div>
+  <div id="divInvOps" class="collapse">
+  <table align="center" class="table table-bordered table-striped table-condensed2" id="invops">
+  </table>
+  </div>
+          <hr/>
+          <div align="center"><h4 data-toggle="collapse" data-target="#divInstances">Экземпляры оборудования <span class="label label-default label-as-badge" id="instances_counter"></span></h4></div>
+  <div id="divInstances" class="collapse">
+  <table align="center" class="table table-bordered table-striped table-condensed2" id="request_instances" classContext="instance">
+  </table>
+  </div>
+  </td>
+</tr>
+</table>
+
+<div class="dialog" id="incidentDialog">
+<table align="center">
+  <tr><td align="center" class="form-inline">Номер связанной заявки:<input id="incidentlink" type="text" size="4" class="form-control"></input></td></tr>
+  <tr><td class="form-inline">Подтип:<select id="incidentsubtype" class="form-control"></select></td></tr>
+  <tr><td align="center">Описание инцидента:</td></tr>
+  <tr><td align="center"><textarea id="incidentcomment" style="height:60px;width:300px" class="form-control"></textarea></td></tr>
+</table>
+</div>
+
+<div style="position:absolute;display:none;border:1px solid black;" id="popupbox">
+<table align="center" style="background-color: white">
+<tr><td>
+  <table align="center"  class="table table-condensed2 table-bordered" id="staircases">
+      <tr class="info"><th colspan="6">Подъезды</th></tr>
+      <tr><th>Номер</th><th>ЛКД</th><th>Порты</th><th>ВБСС</th><th>ТКД</th><th colspan="2">Номера кв.</th></tr>
+  <tbody id="staircases"></tbody>
+</table>
+</td></tr>
+<tr><td>
+  <table align="center" class="table table-condensed2 table-bordered" id="staircasecomments"> 
+  </table>
+</td></tr>
+<tr><td>
+  <table align="center" class="table table-condensed2 table-bordered"> 
+  <thead>
+      <tr class="info"><th colspan="2">Технологии</th></tr>
+      <tr><th>Технология</th><th>Точка агрегации</th></tr>
+  </thead>
+  <tbody>
+                      <tr><td>FTTB</td><td>FTTB_Запоріжжя</td></tr>
+              </tbody>
+  </table>    
+</td></tr>
+</table>
+</div>
+
+<div style="position:absolute;display:none;border:1px solid black;" id="popupbox_tkd">
+<table class="table table-bordered table-striped table-condensed2" style="background-color: white">
+  <thead><tr><th>Включаемые типы:</th></tr></thead>
+  <tbody>
+              </tbody>
+</table>
+</div>
+  
+<div id="dlgSBMSActivationCheck" class="dialog">
+<table class="table-striped">
+  <tbody>
+      <tr><th>Роутер:</th><td id="dlsbmsact_router"></td></tr>
+      <tr><th>Роутер PRO:</th><td id="dlsbmsact_routerpro"></td></tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<div id="dlg_printTemplate" class="dialog">
+<div style="width:40vw;height:30vh">
+  <table class="table table-bordered table-striped table-condensed2" id="tblExportTemplates">
+      
+  </table>
+</div>
+</div>
+</div>
+
+<script>
+  $(document).tooltip({
+      items:".servicesrow",
+      content:function(){
+          var res="";
+          if ($(this).is(".servicesrow"))
+          {
+              service=$(this).attr("rowid");
+              $.ajax({
+                  url: "headless.php?action=getServiceHint",
+                  type: "POST",
+                  data: {
+                      action:"getServiceHint",
+                      id:service
+                  },
+                  async:false
+                  }).done(function(data){
+                      res=data;
+                  });
+          }
+          return res;
+      }
+  });
+</script>
+<div id="dlgViewHistory" class="dialog">
+  <div id="viewHistoryInner"></div>
+</div>
+
+<script>
+  
+  $(".btnViewHistory").click(function(){
+      rowid=$(this).attr("rowid");
+      rowtime=$(this).attr("rowtime");
+      $("#viewHistoryInner").html("<img src=\"icons/loading.gif\"/>");
+      $.post("headless.php?action=viewRequestHistory",{
+          action:"viewRequestHistory",
+          id:rowid
+      },function(data){
+          $("#viewHistoryInner").html(data);
+      });
+      $("#dlgViewHistory").JDialog({
+          title:"История "+rowtime,
+          closebutton:true
+      });
+  });
+  
+</script>
+
+
+<script>
+
+$("h4[data-toggle=\"collapse\"").click(function(){
+  tid=$(this).attr("data-target");
+  t=$(tid).hasClass("in")?0:1;
+  localStorage.setItem("viewRequest_"+tid,t);
+});
+
+function initToggles()
+{
+  $("h4[data-toggle=\"collapse\"").each(function(){
+      tid=$(this).attr("data-target");
+      t=localStorage.getItem("viewRequest_"+tid);
+      if (t==1)
+          $(tid).addClass("in");
+  });
+}
+
+function loadIncidentSubtypes()
+{
+  $("#incidentsubtype").SelectQuery({
+      query:"manualIncidentSubtypes",
+      empty:1,
+      emptytext:" "
+  });
+}
+
+      
+       
+   
+   $("#btnCheckSBMSActivation").click(function()
+   {
+       $("#dlsbmsact_router").html("Проверяется...");
+       $("#dlsbmsact_routerpro").html("Проверяется...");
+       $("#dlgSBMSActivationCheck").JDialog({
+           title:"Статус активации роутеров",
+           buttons:{
+               "Закрыть":function(){
+                   $("#dlgSBMSActivationCheck").dialog("close");
+               }
+           }
+       });
+       $.post("headless.php",{
+           action:"checkSBMSRouter",
+           request:"950207"
+       },function(jd){
+           d=JSON.parse(jd);
+           if (d[1]==0)
+               $("#dlsbmsact_router").html("<span class=\"text-danger\">Не активирован.</span>");
+           else
+               $("#dlsbmsact_router").html("<span class=\"text-success\">Активирован "+d[1]+"</span>");
+           if (d[2]==0)
+               $("#dlsbmsact_routerpro").html("<span class=\"text-danger\">Не активирован.</span>");
+           else
+               $("#dlsbmsact_routerpro").html("<span class=\"text-success\">Активирован "+d[2]+"</span>");
+       });
+   });
+
+$("#btnPrintTemplate").click(function(){
+  $("#tblExportTemplates").TableQuery({
+      query:"rq_exportTemplates",
+      vars:{
+          subtype:"18"
+      },
+      sticky:true
+  });
+  $("#dlg_printTemplate").JDialog({
+      title:"Выберите шаблон для экспорта",
+      buttons:{
+          "Экспорт":submitPrintTemplate
+      }
+  });
+});
+
+function submitPrintTemplate()
+{
+  t=$("#tblExportTemplates").TableQuery("getSelected");
+  if ((t==null)||(t==""))
+      return myAlert("Не выбран шаблон для экспорта.");
+  $("#dlg_printTemplate").dialog("close");
+  actblank("rq_printTemplate&id=950207&template="+t,1);
+}
+
+
+</script>

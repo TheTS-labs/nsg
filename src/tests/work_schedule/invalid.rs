@@ -11,7 +11,7 @@ macro_rules! test {
             #[test]
             fn [<$var _ $name>]() {
                 let html = fs::read_to_string(
-                    format!("src/tests/resources/invalid/work_schedule/{}.html", stringify!($var))
+                    format!("src/tests/assets/work_schedule/invalid/{}.html", stringify!($var))
                 ).expect("Should have been able to read the file");
 
                 let work_schedule = WorkSchedule::from(&html);
@@ -28,9 +28,9 @@ macro_rules! test {
 }
 
 test! {
-    // Test HTML should be at src/tests/resources/invalid/work_schedule/order_index.html
+    // Test HTML should be at src/tests/assets/work_schedule/invalid/order_index.html
     // And tests are asserted against order_index
-    // To recap: Parse WokSchedule from src/tests/resources/invalid/work_schedule/order_index.html,
+    // To recap: Parse WokSchedule from src/tests/assets/work_schedule/invalid/order_index.html,
     // then get .first() Order and assert_eq!(Order.order_index, Some(Err(SerializableIntErrorKind::PosOverflow)))
     order_index: {
         //         order_index's expected value,       Testcase name, Method to get Order from WorkSchedule

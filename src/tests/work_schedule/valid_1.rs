@@ -12,7 +12,7 @@ use crate::work_schedule::WorkSchedule;
 
 #[test]
 fn parses_exactly_three_orders() {
-    let html = fs::read_to_string("src/tests/resources/valid/work_schedule_1.html")
+    let html = fs::read_to_string("src/tests/assets/work_schedule/valid/1.html")
         .expect("Should have been able to read the file");
 
     let work_schedule = WorkSchedule::from(&html);
@@ -22,7 +22,7 @@ fn parses_exactly_three_orders() {
 
 #[test]
 fn order_13367829() {
-    let html = fs::read_to_string("src/tests/resources/valid/work_schedule_1.html")
+    let html = fs::read_to_string("src/tests/assets/work_schedule/valid/1.html")
         .expect("Should have been able to read the file");
 
     let work_schedule = WorkSchedule::from(&html);
@@ -67,7 +67,7 @@ fn order_13367829() {
 
 #[test]
 fn order_13370195() {
-    let html = fs::read_to_string("src/tests/resources/valid/work_schedule_1.html")
+    let html = fs::read_to_string("src/tests/assets/work_schedule/valid/1.html")
         .expect("Should have been able to read the file");
 
     let work_schedule = WorkSchedule::from(&html);
@@ -109,7 +109,7 @@ fn order_13370195() {
 
 #[test]
 fn order_13372183() {
-    let html = fs::read_to_string("src/tests/resources/valid/work_schedule_1.html")
+    let html = fs::read_to_string("src/tests/assets/work_schedule/valid/1.html")
         .expect("Should have been able to read the file");
 
     let work_schedule = WorkSchedule::from(&html);
