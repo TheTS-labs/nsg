@@ -4,30 +4,10 @@ use paste::paste;
 
 use crate::serializable_int_error_kind::SerializableIntErrorKind;
 use crate::work_schedule::WorkSchedule;
-
-macro_rules! test {
-    ($($var:ident: { $($expected:expr, $name:ident, $method:ident $(, $method_arg:expr)?;)* }),* $(,)?) => {
-        $($(paste! {
-            #[test]
-            fn [<$var _ $name>]() {
-                let html = fs::read_to_string(
-                    format!("src/tests/assets/work_schedule/invalid/{}.html", stringify!($var))
-                ).expect("Should have been able to read the file");
-
-                let work_schedule = WorkSchedule::from(&html);
-                let order = work_schedule.0.$method($($method_arg)*).unwrap();
-
-                assert_eq!(
-                    order.$var, $expected,
-                    "order.{} != {}. Got {:?} ({:#?})",
-                    stringify!($var), stringify!($expected), order.$var, order
-                );
-            }
-        })*)*
-    }
-}
+use crate::tests::test;
 
 test! {
+    "work_schedule", WorkSchedule;
     // Test HTML should be at src/tests/assets/work_schedule/invalid/order_index.html
     // And tests are asserted against order_index
     // To recap: Parse WokSchedule from src/tests/assets/work_schedule/invalid/order_index.html,

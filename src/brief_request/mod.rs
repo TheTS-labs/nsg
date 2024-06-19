@@ -294,6 +294,7 @@ impl BriefRequest {
         if let (Some(city), Some(address_string), Some(apartment)) = (city, address_string, apartment) {
             let mut address_iter = address_string.split(',');
 
+            // TODO: strings can be empty
             self.address = Some(Address::from_parts(
                 city,
                 address_iter.next().unwrap().to_string(),
