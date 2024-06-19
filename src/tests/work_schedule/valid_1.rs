@@ -11,13 +11,15 @@ use crate::data::time_constrains::TimeConstrains;
 use crate::work_schedule::WorkSchedule;
 
 #[test]
-fn parses_exactly_three_orders() {
+fn should_guarantee() {
     let html = fs::read_to_string("src/tests/assets/work_schedule/valid/1.html")
         .expect("Should have been able to read the file");
 
     let work_schedule = WorkSchedule::from(&html);
 
-    assert_eq!(work_schedule.0.len(), 3);
+    for order in work_schedule.0 {
+        assert!(order.into_guaranteed().is_some());
+    }
 }
 
 #[test]

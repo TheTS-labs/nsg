@@ -11,6 +11,16 @@ use crate::data::time_constrains::TimeConstrains;
 use crate::view_request::ViewRequest;
 
 #[test]
+fn should_guarantee() {
+    let html = fs::read_to_string("src/tests/assets/view_request/valid/3.html")
+        .expect("Should have been able to read the file");
+
+    let view_request = ViewRequest::from(&html);
+
+    assert!(view_request.into_guaranteed().is_some());
+}
+
+#[test]
 fn fields() {
     let html = fs::read_to_string("src/tests/assets/view_request/valid/3.html")
         .expect("Should have been able to read the file");
