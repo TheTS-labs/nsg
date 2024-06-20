@@ -1,3 +1,4 @@
+mod basic_search;
 mod brief_request;
 mod view_request;
 mod work_schedule;

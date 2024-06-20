@@ -4,8 +4,8 @@ use paste::paste;
 
 use crate::serializable_int_error_kind::SerializableIntErrorKind;
 use crate::serializable_parse_error_kind::SerializableParseErrorKind;
-use crate::view_request::ViewRequest;
 use crate::tests::test;
+use crate::view_request::ViewRequest;
 
 test! {
     "view_request", ViewRequest;

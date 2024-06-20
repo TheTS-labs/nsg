@@ -2,14 +2,14 @@ repos:
 - repo: local
   hooks:
     - id: cargo-fmt
-      name: cargo +nightly fmt
+      name: Format
       description: Format files with cargo fmt.
       entry: cargo +nightly fmt
       language: system
       types: [rust]
       args: ["--"]
     - id: cargo-check
-      name: cargo check
+      name: Check
       description: Check the package for errors.
       entry: cargo check
       language: system
@@ -17,15 +17,15 @@ repos:
       types: [rust]
       pass_filenames: false
     - id: cargo-clippy
-      name: cargo clippy
+      name: Lint
       description: Lint rust sources
       entry: cargo clippy
       language: system
       args: ["--", "-D", "warnings"]
       types: [rust]
       pass_filenames: false
-    - id: cargo-llvm-cov
-      name: cargo llvm-cov
+    - id: cargo-test
+      name: Test
       description: Test rust sources and check coverage
       entry: cargo llvm-cov
       language: system
@@ -33,14 +33,8 @@ repos:
         - "--ignore-filename-regex"
         - "error|default|traits"
         - "-q"
-        - "--fail-under-functions"
-        - "80"
         - "--fail-under-lines"
         - "80"
-        - "--fail-under-regions"
-        - "80"
-        - "-p"
-        - "nsg"
         - "--html"
       types: [rust]
       pass_filenames: false

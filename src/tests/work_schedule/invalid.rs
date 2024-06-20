@@ -3,8 +3,8 @@ use std::fs;
 use paste::paste;
 
 use crate::serializable_int_error_kind::SerializableIntErrorKind;
-use crate::work_schedule::WorkSchedule;
 use crate::tests::test;
+use crate::work_schedule::WorkSchedule;
 
 test! {
     "work_schedule", WorkSchedule;
