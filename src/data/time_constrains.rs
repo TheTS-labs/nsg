@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum TimeConstrainsError {
-    // todo: improve errors
+    // TODO: improve errors
     NoMatch,
     FailedToParse,
     InvalidNaiveTime,
@@ -27,6 +27,7 @@ impl TimeConstrains {
 
         let from_hour = captures["from_hour"]
             .parse::<u32>()
+            // TODO: Impossible to fail
             .map_err(|_| TimeConstrainsError::FailedToParse)?;
         let from_minute = captures["from_minute"]
             .parse::<u32>()

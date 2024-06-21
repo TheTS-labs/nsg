@@ -58,7 +58,7 @@ fn fields() {
     assert_eq!(
         brief_request.last_comment,
         Some(Ok(Comment {
-            datetime: Some(DateTime::parse_from_rfc3339("2024-05-17 12:30:46+03:00").unwrap()),
+            datetime: Some(Ok(DateTime::parse_from_rfc3339("2024-05-17 12:30:46+03:00").unwrap())),
             text:     "Частично заменил кабель, нужен гигабитный свитч ".to_string(),
             user:     Some("████ █████ █████████".to_string()),
         }))

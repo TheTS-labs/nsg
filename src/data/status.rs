@@ -1,4 +1,3 @@
-use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
@@ -35,20 +34,5 @@ impl FromStr for Status {
             "Принята в работу" => Ok(Status::AcceptedForWork),
             _ => Err(StatusError::InvalidStatus(s.to_string())),
         }
-    }
-}
-
-impl Display for Status {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", match self {
-            Status::Assigned => "Назначена",
-            Status::InWork => "В работе",
-            Status::Completed => "Выполнена",
-            Status::Declined => "Отклонена",
-            Status::Deleted => "Удалена",
-            Status::Rejected => "Отказ",
-            Status::Empty => "[-]",
-            Status::AcceptedForWork => "Принята в работу",
-        })
     }
 }

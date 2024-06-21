@@ -21,6 +21,7 @@ impl MDU {
 
         Ok(MDU {
             city_code: captures["city_code"].to_string(),
+            // TODO: FailedToParseNumber should take the error
             number:    captures["number"].parse().map_err(|_| MDUError::FailedToParseNumber)?,
         })
     }

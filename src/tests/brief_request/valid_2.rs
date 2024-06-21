@@ -61,7 +61,7 @@ fn fields() {
     assert_eq!(
         brief_request.last_comment,
         Some(Ok(Comment {
-            datetime: Some(DateTime::parse_from_rfc3339("2024-05-26 12:47:12+03:00").unwrap()),
+            datetime: Some(Ok(DateTime::parse_from_rfc3339("2024-05-26 12:47:12+03:00").unwrap())),
             text:     "Індикатор \"WAN \"не горить;DOWN;Кабель відкритий на N більше 20 метрів;Repair \
                        date-2024-05-26;Указать метр повреждения-Pair A length: 52meter(s) Pair B length: 56meter(s) \
                        Pair A state: Open Pair B state: Open;Указать метр повреждения: Pair A length: 52meter(s) Pair \

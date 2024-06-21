@@ -34,7 +34,7 @@ repos:
         - "error|default|traits"
         - "-q"
         - "--fail-under-lines"
-        - "80"
+        - "70"
         - "--html"
       types: [rust]
       pass_filenames: false

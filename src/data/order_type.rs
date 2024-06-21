@@ -1,4 +1,3 @@
-use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
@@ -31,6 +30,9 @@ pub enum OrderType {
 impl FromStr for OrderType {
     type Err = OrderTypeError;
 
+    // TODO: There's no "Work schedule format" or "Brief request format"
+    // TODO: It's just type and subtype: Order of type "Сервис" and subtype
+    // TODO: "Тюнер ДЕМОНТАЖ"
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             // --- Work schedule format ---
@@ -61,28 +63,5 @@ impl FromStr for OrderType {
 
             _ => Err(OrderTypeError::InvalidOrderType(s.to_string())),
         }
-    }
-}
-
-impl Display for OrderType {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", match self {
-            OrderType::TunerRemoval => "Демонтаж тюнера",
-            OrderType::TunerInstallation => "Установка тюнера",
-            OrderType::TunerReplacement => "Замена тюнера",
-            OrderType::NetGigabit => "Гигабит",
-            OrderType::NetRecoveryActive => "Восстановление (актив)",
-            OrderType::NetRecoveryPassive => "Восстановление (пассив)",
-            OrderType::NetNewActive => "Новое подключение (актив)",
-            OrderType::NetNewPassive => "Новое подключение (пассив)",
-            OrderType::NetBroken => "Ремонт",
-            OrderType::OthersMaster => "Мастер",
-            OrderType::NetRelocationActive => "Переезд (актив)",
-            OrderType::NetRelocationPassive => "Переезд (пассив)",
-            OrderType::SomeBitchComplained => "Какая-то сучка пожаловалась",
-            OrderType::NetRecoveryUnknown => "Восстановление",
-            OrderType::NetNewUnknown => "Новое подключение",
-            OrderType::NetRelocationUnknown => "Переезд",
-        })
     }
 }

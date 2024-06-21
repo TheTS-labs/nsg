@@ -1,5 +1,3 @@
-use std::fmt;
-
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
@@ -46,15 +44,5 @@ impl Address {
                 .map(|capture| capture.as_str().to_string())
                 .unwrap_or_else(|| captures["failover_apartment"].to_string()),
         })
-    }
-}
-
-impl fmt::Display for Address {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{}, {} {}, кв. {}",
-            self.city, self.street, self.building, self.apartment
-        )
     }
 }

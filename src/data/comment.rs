@@ -8,14 +8,13 @@ use crate::serializable_parse_error_kind::SerializableParseErrorKind;
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum CommentError {
     DateTimeFailed(String, SerializableParseErrorKind),
-    LocalTimeInFoldOrGap(String),
 }
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub struct Comment {
     pub text:     String,
     pub user:     Option<String>,
-    pub datetime: Option<DateTime<FixedOffset>>,
+    pub datetime: Option<Result<DateTime<FixedOffset>, SerializableParseErrorKind>>,
 }
 
 impl Comment {
@@ -30,7 +29,7 @@ impl Comment {
         if let Some(caps) = regex.captures(&text) {
             let text = html_escape::decode_html_entities(regex.replace(&text, "").as_ref()).replace("<br/>", "\n");
             let user = Some(caps["user"].to_string());
-            let datetime = Self::as_datetime(&caps["datetime"]).ok();
+            let datetime = Some(Self::as_datetime(&caps["datetime"]));
 
             return Ok(Comment { text, user, datetime });
         };

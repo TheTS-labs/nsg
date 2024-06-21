@@ -1,4 +1,3 @@
-use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
@@ -37,21 +36,5 @@ impl FromStr for InternalStatus {
             "Отложено" => Ok(InternalStatus::Delayed),
             _ => Err(InternalStatusError::InvalidStrStatus(s.to_string())),
         }
-    }
-}
-
-impl Display for InternalStatus {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", match self {
-            InternalStatus::Assigned => "Назначена",
-            InternalStatus::Returned => "Возвращена",
-            InternalStatus::Completed => "Выполнена",
-            InternalStatus::Rejected => "Отклонена",
-            InternalStatus::NotActivated => "Не активирована",
-            InternalStatus::New => "Новая",
-            InternalStatus::Agreed => "Договорена",
-            InternalStatus::NotCompleted => "Не выполнена",
-            InternalStatus::Delayed => "Отложена",
-        })
     }
 }
