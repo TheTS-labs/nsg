@@ -1,12 +1,17 @@
+//! Portal's order status
+
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum InternalStatusError {
+    /// Provided `&str` didn't match any internal status and thus can't be
+    /// represented as [`InternalStatus`]
     InvalidStrStatus(String),
 }
 
+/// Portal's order status
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum InternalStatus {
     Assigned,

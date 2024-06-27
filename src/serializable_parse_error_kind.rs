@@ -1,3 +1,8 @@
+//! [`ParseErrorKind`] with derived `Serialize` and `Deserialize`
+//! implementations
+//!
+//! See [`ParseError`] for more information
+
 use chrono::format::ParseErrorKind;
 use chrono::ParseError;
 use serde::{Deserialize, Serialize};

@@ -1,3 +1,5 @@
+//! Guaranteed brief request
+
 use chrono::{DateTime, FixedOffset};
 use serde::{Deserialize, Serialize};
 
@@ -9,6 +11,10 @@ use crate::data::order_type::OrderType;
 use crate::data::status::Status;
 use crate::data::time_constrains::TimeConstrains;
 
+/// Hence [`BriefRequest`] will not fail hard, it's not necessary valid. You can
+/// guarantee validness of brief request with [`BriefRequest::into_guaranteed`].
+/// For detailed information about field refer to it's documentation or
+/// [`BriefRequest`]'s documentation
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub struct GuaranteedBriefRequest {
     pub order_id:          u32,
@@ -25,6 +31,7 @@ pub struct GuaranteedBriefRequest {
     pub last_comment:      Option<Comment>,
     pub first_comment:     Option<Comment>,
     pub status:            Status,
+    /// Will contain at least one element
     pub phones:            Vec<String>,
 }
 

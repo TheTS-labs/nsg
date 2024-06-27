@@ -1,3 +1,23 @@
+//! Work schedule order
+//!
+//! ## Example usage
+//! You can find example HTMLs in `src/tests/assets/work_schedule/valid`.
+//!
+//! ```
+//! use nsg::work_schedule::order::Order;
+//! use scraper::{Html, Selector};
+//!
+//! let html = include_str!("../tests/assets/work_schedule/valid/1.html");
+//! let fragment = Html::parse_fragment(html);
+//!
+//! let request_row_selector = Selector::parse("table tr td table tr.requestrow").unwrap();
+//! let request_row = fragment.select(&request_row_selector).next().unwrap();
+//!
+//! let order = Order::from_row_and_fragment(&request_row, &fragment);
+//!
+//! println!("Order: {:#?}", order);
+//! ```
+
 use std::str::FromStr;
 
 use itertools::Itertools;
@@ -14,29 +34,36 @@ use crate::data::time_constrains::{TimeConstrains, TimeConstrainsError};
 use crate::macros::selector;
 use crate::serializable_int_error_kind::SerializableIntErrorKind;
 
-/// Representation of parsed order (work schedule)
+/// Parsed order from work schedule. For detailed information about field refer
+/// to it's documentation. Note that all fields will not fail hard allowing to
+/// work with partially valid orders
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize, Default)]
 pub struct Order {
     /// Order index isn't necessary unique. For example in cases of several
-    /// works schedules for the same day
+    /// work schedules for the same day
     pub order_index:       Option<Result<u8, SerializableIntErrorKind>>,
     pub order_id:          Option<Result<u32, SerializableIntErrorKind>>,
     pub internal_order_id: Option<Result<u32, SerializableIntErrorKind>>,
     pub time_constrains:   Option<Result<TimeConstrains, TimeConstrainsError>>,
+    /// List of client's contact phone numbers
     pub phones:            Option<Vec<String>>,
+    /// Client's personal account number
     pub pa:                Option<String>,
     pub address:           Option<Result<Address, AddressError>>,
     pub mdu:               Option<Result<MDU, MDUError>>,
     pub status:            Option<Result<Status, StatusError>>,
     pub order_type:        Option<Result<OrderType, OrderTypeError>>,
+    /// Client's full name (Kyivstar's version)
     pub client:            Option<String>,
     pub internal_status:   Option<Result<InternalStatus, InternalStatusError>>,
 }
 
+/// Hence [`Order`] will not fail hard, it's not necessary valid. You can
+/// guarantee validness of order with [`Order::into_guaranteed`]. For detailed
+/// information about field refer to it's documentation or [`Order`]'s
+/// documentation
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub struct GuaranteedOrder {
-    /// Order index isn't necessary unique. For example in cases of several
-    /// works schedules for the same day
     pub order_index:       u8,
     pub order_id:          u32,
     pub internal_order_id: u32,
@@ -69,6 +96,8 @@ impl Order {
         })
     }
 
+    /// Parse order from relevant row and whole HTML table from which row is
+    /// extracted
     pub fn from_row_and_fragment(row: &ElementRef<'_>, fragment: &Html) -> Self {
         let rowid = row.attr("rowid");
 

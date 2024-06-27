@@ -1,3 +1,5 @@
+//! Basic search entry
+
 use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 
@@ -7,21 +9,30 @@ use crate::data::mdu::{MDUError, MDU};
 use crate::serializable_int_error_kind::SerializableIntErrorKind;
 use crate::serializable_parse_error_kind::SerializableParseErrorKind;
 
-/// Representation of parsed search entry
+/// Parsed search entry from basic search. For detailed information about field
+/// refer to it's documentation. Note that all fields will not fail hard
+/// allowing to work with partially valid orders
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize, Default)]
 pub struct SearchEntry {
     pub order_id:          Option<Result<u32, SerializableIntErrorKind>>,
     pub internal_order_id: Option<Result<u32, SerializableIntErrorKind>>,
+    /// Client's phone number (only the first)
     pub phone_number:      Option<String>,
     pub address:           Option<Address>,
     pub mdu:               Option<Result<MDU, MDUError>>,
+    /// Client's full name (Kyivstar's version)
     pub client:            Option<String>,
+    /// Installer full name (Only the first)
     pub installer:         Option<String>,
     pub internal_status:   Option<Result<InternalStatus, InternalStatusError>>,
+    /// Date of last order update
     pub last_updated:      Option<Result<NaiveDate, SerializableParseErrorKind>>,
 }
 
-/// Guarantees that all fields are ok
+/// Hence [`SearchEntry`] will not fail hard, it's not necessary valid. You can
+/// guarantee validness of search entry with [`SearchEntry::into_guaranteed`].
+/// For detailed information about field refer to it's documentation or
+/// [`SearchEntry`]'s documentation
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize)]
 pub struct GuaranteedSearchEntry {
     pub order_id:          u32,

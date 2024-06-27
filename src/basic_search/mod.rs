@@ -1,3 +1,17 @@
+//! Basic search parser (collection of [`SearchEntry`]s)
+//!
+//! ## Example usage
+//! You can find example HTMLs in `src/tests/assets/basic_search/valid`
+//!
+//! ```
+//! use nsg::basic_search::BasicSearch;
+//!
+//! let html = include_str!("../tests/assets/basic_search/valid/1.html");
+//! let basic_search = BasicSearch::from(&html);
+//!
+//! println!("Search entries: {:#?}", basic_search.0);
+//! ```
+
 pub mod search_entry;
 
 use std::fmt::Debug;
@@ -13,12 +27,12 @@ use crate::data::address::Address;
 use crate::data::internal_status::InternalStatus;
 use crate::data::mdu::MDU;
 
-/// Representation of parsed basic search
+/// Parsed work schedule containing vector of [`SearchEntry`]s
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Default, Deserialize)]
 pub struct BasicSearch(pub Vec<SearchEntry>);
 
 impl BasicSearch {
-    /// Parse basic search from html
+    /// Parse basic search from HTML
     pub fn from(html: &str) -> BasicSearch {
         let mut basic_search = BasicSearch::default();
 

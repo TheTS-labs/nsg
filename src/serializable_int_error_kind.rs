@@ -1,3 +1,7 @@
+//! [`IntErrorKind`] with derived `Serialize` and `Deserialize` implementations
+//!
+//! See [`IntErrorKind`] for more information
+
 use std::num::IntErrorKind;
 
 use serde::{Deserialize, Serialize};

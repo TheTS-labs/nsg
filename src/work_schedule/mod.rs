@@ -1,3 +1,17 @@
+//! Work schedule parser (collection of [`Order`]s)
+//!
+//! ## Example usage
+//! You can find example HTMLs in `src/tests/assets/work_schedule/valid`
+//!
+//! ```
+//! use nsg::work_schedule::WorkSchedule;
+//!
+//! let html = include_str!("../tests/assets/work_schedule/valid/1.html");
+//! let work_schedule = WorkSchedule::from(&html);
+//!
+//! println!("Orders: {:#?}", work_schedule.0);
+//! ```
+
 pub mod order;
 
 use scraper::{Html, Selector};
@@ -5,12 +19,12 @@ use serde::{Deserialize, Serialize};
 
 use crate::work_schedule::order::Order;
 
-/// Representation of parsed work schedule
+/// Parsed work schedule containing vector of [`Order`]s
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Default, Deserialize)]
 pub struct WorkSchedule(pub Vec<Order>);
 
 impl WorkSchedule {
-    /// Parse work schedule from html
+    /// Parse work schedule from HTML
     pub fn from(html: &str) -> WorkSchedule {
         let fragment = Html::parse_fragment(html);
         let orders = WorkSchedule::parse(&fragment);

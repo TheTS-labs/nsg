@@ -5,8 +5,8 @@ use crate::view_request::ViewRequest;
 use crate::work_schedule::WorkSchedule;
 use crate::Nsg;
 
+/// Implementation for bridge methods between Portal and data pillar parsers
 impl Nsg {
-    /// Fetches and parses the work schedule for the given date
     pub async fn work_schedule(&self, date: chrono::NaiveDate) -> WorkSchedule {
         let payload = serde_urlencoded::to_string(Payload {
             action: "workschedule1",
@@ -26,7 +26,6 @@ impl Nsg {
         WorkSchedule::from(&response)
     }
 
-    /// Fetches and parses the brief request for the given internal order id
     pub async fn brief_request(&self, internal_order_id: u32) -> BriefRequest {
         let text = self
             .request(
@@ -43,7 +42,6 @@ impl Nsg {
         BriefRequest::from(&text)
     }
 
-    /// Fetches and parses the view request for the given internal order id
     pub async fn view_request(&self, internal_order_id: u32) -> ViewRequest {
         let session_code_body = self
             .request(
@@ -81,21 +79,20 @@ impl Nsg {
         ViewRequest::from(&response)
     }
 
-    /// Fetches and parses the user
-    pub async fn get_user(&self) -> serde_json::Value {
-        let text = self
-            .request(self.construct_headers(), String::from("actiondata=core_getUser"), None)
-            .await
-            .unwrap()
-            .text()
-            .await
-            .unwrap();
+    // TODO: Provide User data pillar
+    // /// Fetches and parses the user
+    // pub async fn get_user(&self) -> serde_json::Value {
+    //     let text = self
+    //         .request(self.construct_headers(),
+    // String::from("actiondata=core_getUser"), None)         .await
+    //         .unwrap()
+    //         .text()
+    //         .await
+    //         .unwrap();
 
-        serde_json::from_str(&text).unwrap()
-    }
+    //     serde_json::from_str(&text).unwrap()
+    // }
 
-    /// Performs a basic search, fetches and parses the result for the given
-    /// search text
     pub async fn basic_search(&self, search_text: &str) -> BasicSearch {
         let text = self
             .request(

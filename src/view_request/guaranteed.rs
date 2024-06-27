@@ -1,3 +1,5 @@
+//! Guaranteed view request
+
 use chrono::{DateTime, FixedOffset, NaiveDate};
 use serde::{Deserialize, Serialize};
 
@@ -9,6 +11,10 @@ use crate::data::order_type::OrderType;
 use crate::data::status::Status;
 use crate::data::time_constrains::TimeConstrains;
 
+/// Hence [`ViewRequest`] will not fail hard, it's not necessary valid. You can
+/// guarantee validness of view request with [`ViewRequest::into_guaranteed`].
+/// For detailed information about field refer to it's documentation or
+/// [`ViewRequest`]'s documentation
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub struct GuaranteedViewRequest {
     pub order_id:          u32,
@@ -24,6 +30,7 @@ pub struct GuaranteedViewRequest {
     pub time_constrains:   TimeConstrains,
     pub installers:        Vec<String>,
     pub status:            Status,
+    /// Will contain at least one element
     pub phones:            Vec<String>,
     pub assigned_for:      NaiveDate,
     pub comments:          Vec<FullComment>,

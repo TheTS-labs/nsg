@@ -1,3 +1,17 @@
+//! Brief request parser
+//!
+//! ## Example usage
+//! You can find example HTMLs in `src/tests/assets/brief_request/valid`
+//!
+//! ```
+//! use nsg::brief_request::BriefRequest;
+//!
+//! let html = include_str!("../tests/assets/brief_request/valid/1.html");
+//! let brief_request = BriefRequest::from(&html);
+//!
+//! println!("Order (brief request): {:#?}", brief_request);
+//! ```
+
 pub mod guaranteed;
 
 use std::fmt::Debug;
@@ -21,7 +35,10 @@ use crate::serializable_parse_error_kind::SerializableParseErrorKind;
 use crate::traits::is_it::IsIt;
 use crate::traits::prev_element_ref::PrevElementRef;
 
-/// Representation of parsed brief request
+/// Parsed brief request containing some (more fields available via
+/// [`ViewRequest`](crate::view_request::ViewRequest)) of the fields of order.
+/// Note that all fields will not fail hard allowing to work with partially
+/// valid order
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize, Default)]
 pub struct BriefRequest {
     pub order_id:          Option<Result<u32, SerializableIntErrorKind>>,
@@ -30,21 +47,27 @@ pub struct BriefRequest {
     pub creation_date:     Option<Result<DateTime<FixedOffset>, SerializableParseErrorKind>>,
     pub internal_status:   Option<Result<InternalStatus, InternalStatusError>>,
     pub address:           Option<Address>,
+    /// Client's full name (Kyivstar's version)
     pub client:            Option<String>,
+    /// Only orders for subscription (connection) to Kyivstar's network contain
+    /// service package name
     pub service:           Option<String>,
+    /// Client's personal account number
     pub pa:                Option<String>,
     pub time_constrains:   Option<Result<TimeConstrains, TimeConstrainsError>>,
+    /// One order can have up to two installers
     pub installers:        Vec<String>,
     pub last_comment:      Option<Result<Comment, CommentError>>,
     pub first_comment:     Option<Result<Comment, CommentError>>,
     pub status:            Option<Result<Status, StatusError>>,
+    /// List of client's contact phone numbers
     pub phones:            Vec<String>,
 }
 
 impl PrevElementRef for BriefRequest {}
 
 impl BriefRequest {
-    /// Parse brief request from html
+    /// Parse brief request from HTML
     pub fn from(html: &str) -> BriefRequest {
         log::debug!(target: "nsg", "Processing HTML: {:?}", html);
         let mut brief_request = BriefRequest::default();

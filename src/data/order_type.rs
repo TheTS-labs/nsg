@@ -1,12 +1,27 @@
+//! Type of work on order
+//!
+//! # Terminology
+//!
+//! - **Active** - order for subscription (connection) to Kyivstar's network
+//!   created from inside "Нет-Строй"
+//! - **Passive** - as opposed to Active, it's order created by whoever outside
+//!   "Нет-Строй"
+//! - [`OrderType::SomeBitchComplained`] - is also used to give additional
+//!   information for installer and/or logistician but who fucking cares, shut
+//!   up your complaining mouth 😇
+
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum OrderTypeError {
+    /// Provided `&str` didn't match any order type and thus can't be
+    /// represented as [`OrderType`]
     InvalidOrderType(String),
 }
 
+/// Order type is a type of work on order that needs to be done
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum OrderType {
     TunerRemoval,

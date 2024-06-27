@@ -1,3 +1,5 @@
+//! [`Nsg`](crate::Nsg) error
+
 use serde::{Deserialize, Serialize};
 
 pub type NsgResult<T> = Result<T, NsgError>;
@@ -6,22 +8,15 @@ pub type NsgResult<T> = Result<T, NsgError>;
 pub enum NsgError {
     /// Relogin failed due to missing session cookie in response
     NoSessionCookie,
-    /// Request failed due to timeout
-    ReqwestTimeout,
-    /// Request failed due to request error
-    ReqwestRequestError,
-    /// Request failed due to connect error
-    ReqwestConnectError,
-    /// Request failed due to request or response body error
-    ReqwestBodyError,
-    /// Request failed due to decoding response's body error
-    ReqwestDecodeError,
-    /// Request failed due to unknown error
-    ReqwestUnknownError,
-    /// Failed to url encode payload
-    UrlEncodeError,
-    /// Failed to relogin
+    /// Failed to relogin due to another [`NsgError`]
     FailedToRelogin(Box<NsgError>),
+    ReqwestTimeout,
+    ReqwestRequestError,
+    ReqwestConnectError,
+    ReqwestBodyError,
+    ReqwestDecodeError,
+    ReqwestUnknownError,
+    UrlEncodeError,
 }
 
 impl From<reqwest::Error> for NsgError {

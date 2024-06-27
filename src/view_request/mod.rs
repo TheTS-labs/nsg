@@ -1,4 +1,18 @@
-pub mod comments;
+//! View request parser
+//!
+//! ## Example usage
+//! You can find example HTMLs in `src/tests/assets/view_request/valid`
+//!
+//! ```
+//! use nsg::view_request::ViewRequest;
+//!
+//! let html = include_str!("../tests/assets/view_request/valid/1.html");
+//! let view_request = ViewRequest::from(&html);
+//!
+//! println!("Order (view request): {:#?}", view_request);
+//! ```
+
+mod comments;
 pub mod guaranteed;
 
 use std::fmt::Debug;
@@ -22,28 +36,42 @@ use crate::serializable_parse_error_kind::SerializableParseErrorKind;
 use crate::traits::is_it::IsIt;
 use crate::traits::prev_element_ref::PrevElementRef;
 
-/// Representation of parsed view request
+/// Parsed view request containing full order information and it's detailed
+/// comments. Note that all fields will not fail hard allowing to work with
+/// partially valid order
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize, Default)]
 pub struct ViewRequest {
     pub order_id:          Option<Result<u32, SerializableIntErrorKind>>,
     pub internal_order_id: Option<Result<u32, SerializableIntErrorKind>>,
     // TODO: Use "Подтип" to determine active or passive order type
+    /// Currently [`OrderType`] in view request is limited to
+    /// [`OrderType::NetNewUnknown`], [`OrderType::NetRecoveryUnknown`] and
+    /// [`OrderType::NetRelocationUnknown`] instead of their active or passive
+    /// variants. Other types are not affected
     pub order_type:        Option<Result<OrderType, OrderTypeError>>,
-    // TODO: Rename to creation_date
+    // TODO: Rename to creation_datetime
     pub creation_date:     Option<Result<DateTime<FixedOffset>, SerializableParseErrorKind>>,
     pub internal_status:   Option<Result<InternalStatus, InternalStatusError>>,
     pub address:           Option<Address>,
+    /// Client's full name (Kyivstar's version)
     pub client:            Option<String>,
+    /// Only orders for subscription (connection) to Kyivstar's network contain
+    /// service package name
     pub service:           Option<String>,
+    /// Client's personal account number
     pub pa:                Option<String>,
     // TODO: Parse also "Канал подачи заявки", "Код продавца" and "Продавец"
     // TODO: Example at src/tests/assets/view_request/valid/4.html
+    /// Name or phone number of person who created order
     pub seller:            Option<String>,
     pub time_constrains:   Option<Result<TimeConstrains, TimeConstrainsError>>,
+    /// One order can have up to two installers
     pub installers:        Vec<String>,
     pub status:            Option<Result<Status, StatusError>>,
     // TODO: View request gives only one of possibly two phones
+    /// List of client's contact phone numbers
     pub phones:            Vec<String>,
+    /// Date on which the order is scheduled
     pub assigned_for:      Option<Result<NaiveDate, SerializableParseErrorKind>>,
     pub comments:          Vec<Result<FullComment, FullCommentError>>,
 }
@@ -51,7 +79,7 @@ pub struct ViewRequest {
 impl PrevElementRef for ViewRequest {}
 
 impl ViewRequest {
-    /// Parse view request from html
+    /// Parse view request from HTML
     pub fn from(html: &str) -> ViewRequest {
         log::debug!(target: "nsg", "Processing HTML: {:?}", html);
         let mut view_request = ViewRequest::default();

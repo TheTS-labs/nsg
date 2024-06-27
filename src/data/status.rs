@@ -1,12 +1,17 @@
+//! Kyivstar's order status
+
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum StatusError {
+    /// Provided `&str` didn't match any order type and thus can't be
+    /// represented as [`Status`]
     InvalidStatus(String),
 }
 
+/// Kyivstar's order status
 #[derive(Clone, PartialEq, PartialOrd, Eq, Ord, Debug, Hash, Serialize, Deserialize)]
 pub enum Status {
     Assigned,
