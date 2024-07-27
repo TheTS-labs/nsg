@@ -1,6 +1,6 @@
 //! Nsg is a library for interacting with Portal.
-//! It provides methods for basic search, view request, work schedule and brief
-//! request
+//! It provides read-only methods for basic search, view request, work schedule
+//! and brief request
 //!
 //! **Note**: This library is written to work only with users with the role of
 //! "Монтажник (все)" It may not work properly with other roles
@@ -42,6 +42,9 @@
 //! - **Portal**: Refers to "Нет-Строй"'s "IC Портал-К"
 //! - **Kyivstar's version**: Kyivstar's data is not always 100% right. It's
 //!   really apparent in the client's full name
+
+// TODO: Test README.md's code examples
+// #[doc = include_str!("../README.md")]
 
 use error::{NsgError, NsgResult};
 use payload::LoginPayload;

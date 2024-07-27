@@ -1,7 +1,17 @@
 [package]
 name = "nsg"
-version = "0.14.9"
+version = "1.0.0"
 edition = "2021"
+license = "MIT"
+description = "A library for interacting with Portal"
+homepage = "https://github.com/TheTS-labs/nsg"
+repository = "https://github.com/TheTS-labs/nsg"
+readme = "README.md"
+categories = ["parsing", "parser-implementations"]
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
